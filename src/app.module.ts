@@ -28,26 +28,37 @@ import { ConvocatoriaEntity } from './modules/conectividad/entities/convocatoria
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('DB_HOST', 'localhost'),
-        port: Number(config.get('DB_PORT', 5432)),
-        username: config.get<string>('DB_USER', 'marruecos'),
-        password: config.get<string>('DB_PASSWORD', 'marruecos123'),
-        database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
-        entities: [
-          ProductoEntity,
-          InsumoEntity,
-          RegistroDiarioEntity,
-          FiadoEntity,
-          CompraColectivaEntity,
-          FondoComunitarioEntity,
-          EncuentroComunitarioEntity,
-          ConvocatoriaEntity,
-        ],
-        synchronize: true,
-        logging: config.get('NODE_ENV') === 'development',
-      }),
+      useFactory: (config: ConfigService) => {
+        const databaseUrl =
+          config.get<string>('DATABASE_URL') || config.get<string>('POSTGRES_URL');
+        const ssl = config.get<string>('DB_SSL', 'false') === 'true';
+
+        return {
+          type: 'postgres' as const,
+          ...(databaseUrl
+            ? { url: databaseUrl }
+            : {
+                host: config.get<string>('DB_HOST', 'localhost'),
+                port: Number(config.get('DB_PORT', 5432)),
+                username: config.get<string>('DB_USER', 'marruecos'),
+                password: config.get<string>('DB_PASSWORD', 'marruecos123'),
+                database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
+              }),
+          ...(ssl ? { ssl: { rejectUnauthorized: true } } : {}),
+          entities: [
+            ProductoEntity,
+            InsumoEntity,
+            RegistroDiarioEntity,
+            FiadoEntity,
+            CompraColectivaEntity,
+            FondoComunitarioEntity,
+            EncuentroComunitarioEntity,
+            ConvocatoriaEntity,
+          ],
+          synchronize: true,
+          logging: config.get('NODE_ENV') === 'development',
+        };
+      },
     }),
     CosteoModule,
     BolsillosModule,

@@ -28,6 +28,16 @@ npm run start:dev
 
 No ejecutes a la vez el servicio `api` de Docker y `npm run start:dev`, porque ambos usan el puerto 3000.
 
+## Despliegue en Vercel
+
+Vercel no puede conectarse al PostgreSQL local de Docker. Agrega una base PostgreSQL hospedada (por ejemplo, Neon) y configura en **Project Settings → Environment Variables**:
+
+- `DATABASE_URL` o `POSTGRES_URL`: URL de conexión privada de la base.
+- `DB_SSL=true`: si el proveedor requiere SSL.
+- `NODE_ENV=production`.
+
+Luego vuelve a desplegar. No subas `.env` ni pegues la URL de conexión en el repositorio.
+
 ## Estructura
 
 ```
