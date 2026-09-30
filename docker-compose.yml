@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mipyme-marruecos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: marruecos
+      POSTGRES_PASSWORD: marruecos123
+      POSTGRES_DB: mipyme_marruecos
+    ports:
+      - "5433:5432"
+    volumes:
+      - marruecos_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marruecos -d mipyme_marruecos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  api:
+    build: .
+    container_name: proyecto-institucional
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: marruecos
+      DB_PASSWORD: marruecos123
+      DB_NAME: mipyme_marruecos
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/salud').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  marruecos_pg_data:
