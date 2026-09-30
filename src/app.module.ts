@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -19,6 +19,58 @@ import { FondoComunitarioEntity } from './modules/red-solidaria/entities/fondo-c
 import { EncuentroComunitarioEntity } from './modules/red-solidaria/entities/encuentro-comunitario.entity';
 import { ConvocatoriaEntity } from './modules/conectividad/entities/convocatoria.entity';
 
+// Check if any database config is available
+const hasDatabase = !!(
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.DB_HOST
+);
+
+const dbModules: Array<DynamicModule | typeof CosteoModule> = hasDatabase
+  ? [
+      TypeOrmModule.forRootAsync({
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => {
+          const databaseUrl =
+            config.get<string>('DATABASE_URL') || config.get<string>('POSTGRES_URL');
+          const ssl = config.get<string>('DB_SSL', 'false') === 'true' || !!databaseUrl;
+
+          return {
+            type: 'postgres' as const,
+            ...(databaseUrl
+              ? { url: databaseUrl }
+              : {
+                  host: config.get<string>('DB_HOST', 'localhost'),
+                  port: Number(config.get('DB_PORT', 5432)),
+                  username: config.get<string>('DB_USER', 'marruecos'),
+                  password: config.get<string>('DB_PASSWORD', 'marruecos123'),
+                  database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
+                }),
+            ...(ssl ? { ssl: { rejectUnauthorized: false } } : {}),
+            entities: [
+              ProductoEntity,
+              InsumoEntity,
+              RegistroDiarioEntity,
+              FiadoEntity,
+              CompraColectivaEntity,
+              FondoComunitarioEntity,
+              EncuentroComunitarioEntity,
+              ConvocatoriaEntity,
+            ],
+            synchronize: true,
+            logging: config.get('NODE_ENV') === 'development',
+          };
+        },
+      }),
+      CosteoModule,
+      BolsillosModule,
+      FiadosModule,
+      RedSolidariaModule,
+      ConectividadModule,
+      SeedModule,
+    ]
+  : [];
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -26,46 +78,7 @@ import { ConvocatoriaEntity } from './modules/conectividad/entities/convocatoria
       rootPath: join(process.cwd(), 'public'),
       exclude: ['/api/(.*)'],
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const databaseUrl =
-          config.get<string>('DATABASE_URL') || config.get<string>('POSTGRES_URL');
-        const ssl = config.get<string>('DB_SSL', 'false') === 'true';
-
-        return {
-          type: 'postgres' as const,
-          ...(databaseUrl
-            ? { url: databaseUrl }
-            : {
-                host: config.get<string>('DB_HOST', 'localhost'),
-                port: Number(config.get('DB_PORT', 5432)),
-                username: config.get<string>('DB_USER', 'marruecos'),
-                password: config.get<string>('DB_PASSWORD', 'marruecos123'),
-                database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
-              }),
-          ...(ssl ? { ssl: { rejectUnauthorized: true } } : {}),
-          entities: [
-            ProductoEntity,
-            InsumoEntity,
-            RegistroDiarioEntity,
-            FiadoEntity,
-            CompraColectivaEntity,
-            FondoComunitarioEntity,
-            EncuentroComunitarioEntity,
-            ConvocatoriaEntity,
-          ],
-          synchronize: true,
-          logging: config.get('NODE_ENV') === 'development',
-        };
-      },
-    }),
-    CosteoModule,
-    BolsillosModule,
-    FiadosModule,
-    RedSolidariaModule,
-    ConectividadModule,
-    SeedModule,
+    ...dbModules,
   ],
   controllers: [SaludController],
 })
