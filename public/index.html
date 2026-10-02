@@ -2,515 +2,2189 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#063d3b" />
-  <title>MiPyme Marruecos | Gestión popular</title>
+  <title>MiPyme Marruecos | Red Popular de Gestión, Costeo y Economía Solidaria</title>
+  
+  <!-- Tipografía moderna Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modelos empaquetados para modo offline / standalone -->
+  <script src="./models/models.js"></script>
+
   <style>
     :root {
-      color-scheme: light;
-      --forest: #073e3b;
-      --forest-2: #09564e;
-      --mint: #dff5ec;
-      --paper: #f2f7f8;
-      --white: #fff;
-      --ink: #172a31;
-      --muted: #71828a;
-      --line: #e2ebee;
-      --green: #0da77d;
-      --green-soft: #e2f7ef;
-      --purple: #7552e8;
-      --purple-soft: #f0edff;
-      --amber: #efa900;
-      --amber-soft: #fff5d9;
-      --blue: #258de5;
-      --blue-soft: #e8f4ff;
-      --red: #d85454;
-      --shadow: 0 8px 24px rgba(22, 61, 70, .07);
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      --primary: #064e43;
+      --primary-dark: #04362e;
+      --primary-light: #0d7968;
+      --primary-glow: rgba(13, 121, 104, 0.15);
+      
+      --accent: #10b981;
+      --accent-soft: #ecfdf5;
+      --gold: #f59e0b;
+      --gold-soft: #fef3c7;
+      --indigo: #6366f1;
+      --indigo-soft: #eef2ff;
+      --rose: #f43f5e;
+      --rose-soft: #fff1f2;
+      --sky: #0284c7;
+      --sky-soft: #f0f9ff;
+      
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-border: #e2e8f0;
+      
+      --ink: #0f172a;
+      --ink-muted: #64748b;
+      --ink-subtle: #94a3b8;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 14px -1px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 12px 28px -4px rgb(0 0 0 / 0.12), 0 4px 10px -3px rgb(0 0 0 / 0.07);
+      
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; color: var(--ink); background: var(--paper); min-height: 100vh; }
-    button, input, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-    .shell { min-height: 100vh; display: grid; grid-template-columns: 228px minmax(0, 1fr); }
-    .sidebar { position: sticky; top: 0; height: 100vh; background: var(--forest); color: white; padding: 22px 14px 16px; display: flex; flex-direction: column; z-index: 4; }
-    .brand { display: flex; gap: 10px; align-items: center; padding: 0 9px 24px; }
-    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 12px; background: #0b7465; color: #c7f26d; font-size: 22px; }
-    .brand strong { display: block; line-height: 1.1; font-size: 14px; }
-    .brand small { color: #a8d3c8; font-size: 10px; }
-    .nav-label { color: #7db8ad; text-transform: uppercase; letter-spacing: .08em; font-size: 9px; padding: 9px 11px; }
-    .nav-list { display: grid; gap: 4px; }
-    .nav-link { border: 0; border-radius: 7px; padding: 11px 12px; color: #d5e8e4; background: transparent; text-align: left; display: flex; align-items: center; gap: 11px; font-size: 12px; transition: background .18s, color .18s; }
-    .nav-link:hover, .nav-link.active { background: #087e68; color: white; }
-    .nav-icon { width: 17px; text-align: center; font-size: 15px; }
-    .sidebar-bottom { margin-top: auto; }
-    .user-card { border-top: 1px solid rgba(255,255,255,.14); padding: 16px 7px 0; display: flex; gap: 9px; align-items: center; }
-    .avatar { display: grid; place-items: center; width: 32px; height: 32px; background: #e6c6a4; color: #574332; border-radius: 50%; font-weight: 700; font-size: 11px; }
-    .user-card strong { display: block; font-size: 10px; }
-    .user-card small { color: #a8d3c8; font-size: 9px; }
-    .workspace { min-width: 0; }
-    .topbar { height: 64px; padding: 0 30px; background: var(--white); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 18px; position: sticky; top: 0; z-index: 3; }
-    .search { width: min(360px, 45%); position: relative; }
-    .search input { width: 100%; padding: 10px 12px 10px 34px; border: 1px solid #e6edef; background: #f8fbfc; border-radius: 6px; font-size: 11px; outline: none; }
-    .search span { position: absolute; left: 11px; top: 9px; color: #81949a; font-size: 13px; }
-    .topbar-spacer { flex: 1; }
-    .top-action { border: 0; background: transparent; color: #526970; font-size: 16px; padding: 5px; }
-    .top-date { color: var(--muted); font-size: 10px; }
-    .connection-status { color: #916000; background: #fff5d9; border-radius: 20px; padding: 5px 8px; font-size: 9px; white-space: nowrap; }
-    main { max-width: 1440px; margin: 0 auto; padding: 25px 30px 36px; }
-    .page { display: none; animation: rise .24s ease both; }
-    .page.active { display: block; }
-    @keyframes rise { from { opacity: .3; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 2px 0 20px; }
-    .eyebrow { margin: 0 0 5px; color: var(--green); font-size: 10px; font-weight: 700; text-transform: uppercase; }
-    h1 { margin: 0; font-size: 22px; letter-spacing: 0; }
-    .subheading { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
-    .button { display: inline-flex; justify-content: center; align-items: center; gap: 7px; min-height: 36px; border: 1px solid transparent; border-radius: 6px; padding: 0 13px; background: var(--forest-2); color: white; font-size: 11px; font-weight: 700; text-decoration: none; transition: .15s; }
-    .button:hover { background: #087663; transform: translateY(-1px); }
-    .button.secondary { background: white; border-color: var(--line); color: #426067; }
-    .button.secondary:hover { border-color: #9fbab8; background: #f8fcfb; }
-    .button.small { min-height: 29px; padding: 0 9px; font-size: 10px; }
-    .button.danger { background: #fff1f0; color: #b64040; border-color: #f6d9d6; }
-    .card { border: 1px solid var(--line); border-radius: 7px; background: var(--white); box-shadow: var(--shadow); }
-    .card-pad { padding: 16px; }
-    .hero { overflow: hidden; display: grid; grid-template-columns: 1.4fr .9fr; min-height: 152px; margin-bottom: 17px; background: linear-gradient(105deg, #fff 0%, #f1faf8 66%, #d9f0e8 100%); border: 1px solid #e0eeeb; border-radius: 7px; box-shadow: var(--shadow); }
-    .hero-copy { padding: 22px 24px; align-self: center; }
-    .hero-copy h2 { margin: 0; font-size: 21px; }
-    .hero-copy p { color: #61767c; font-size: 11px; margin: 8px 0 14px; }
-    .hero-art { min-height: 150px; position: relative; overflow: hidden; display: grid; place-items: center; background: radial-gradient(ellipse at 70% 65%, rgba(20,158,117,.2), transparent 58%), repeating-linear-gradient(135deg, transparent 0 18px, rgba(7,62,59,.025) 18px 20px); }
-    .hero-art:before { content: ""; position: absolute; width: 220px; height: 94px; right: 10%; bottom: -18px; border-radius: 50% 50% 0 0; background: #c6e8d9; transform: rotate(-8deg); }
-    .hero-art:after { content: "MARRUECOS"; position: absolute; right: 17px; top: 15px; color: rgba(7,62,59,.38); font-size: 9px; font-weight: 700; letter-spacing: .15em; }
-    .market { position: relative; z-index: 1; display: flex; align-items: end; gap: 8px; height: 100px; }
-    .market span { display: block; width: 28px; border-radius: 4px 4px 0 0; background: linear-gradient(#178e73, #0c614f); box-shadow: 0 3px 6px #0a60432a; }
-    .market span:nth-child(1) { height: 48px; }.market span:nth-child(2) { height: 70px; }.market span:nth-child(3) { height: 57px; }.market span:nth-child(4) { height: 87px; }.market span:nth-child(5) { height: 63px; }
-    .market i { position: absolute; left: 27px; top: 10px; width: 145px; height: 45px; border-top: 2px solid #edae2d; border-radius: 50%; transform: rotate(-11deg); }
-    .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 17px; }
-    .stat { min-height: 91px; border-radius: 7px; color: white; padding: 14px 15px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
-    .stat.green { background: linear-gradient(135deg,#20bc8b,#07956e); }.stat.purple { background: linear-gradient(135deg,#906cf4,#6546d5); }.stat.amber { background: linear-gradient(135deg,#ffca43,#f2a900); }.stat.blue { background: linear-gradient(135deg,#47aaf3,#1681d5); }
-    .stat-label { opacity: .9; font-size: 10px; display: flex; align-items: center; gap: 7px; }
-    .stat strong { font-size: 19px; }.stat small { opacity: .85; font-size: 9px; }
-    .dashboard-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(280px,.8fr); gap: 14px; }
-    .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13px; gap: 12px; }
-    .section-title h2 { font-size: 13px; margin: 0; }
-    .text-link { color: var(--forest-2); font-weight: 700; font-size: 10px; cursor: pointer; border: 0; background: none; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 10px; }
-    th { color: #82939a; font-size: 9px; font-weight: 600; padding: 9px 8px; background: #f7fafb; white-space: nowrap; }
-    td { padding: 10px 8px; border-top: 1px solid #edf2f3; color: #40565e; white-space: nowrap; }
-    td strong { color: var(--ink); font-weight: 600; }
-    .positive { color: #0b9a69; font-weight: 700; }
-    .pill { display: inline-block; padding: 4px 7px; border-radius: 20px; background: var(--green-soft); color: #0b9268; font-size: 9px; font-weight: 700; }
-    .pill.pending { color: #bf7510; background: #fff2d9; }.pill.paid { color: #0a9266; background: #e2f7ef; }.pill.closed { color: #61737a; background: #edf2f4; }
-    .chart-legend { display: flex; gap: 12px; color: var(--muted); font-size: 9px; }
-    .chart-legend span:before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 2px; background: var(--green); }.chart-legend span:nth-child(2):before { background: var(--purple); }.chart-legend span:nth-child(3):before { background: var(--amber); }
-    .chart { height: 168px; display: flex; align-items: end; justify-content: space-around; gap: 8px; border-bottom: 1px solid var(--line); padding: 12px 4px 22px; background: repeating-linear-gradient(to bottom, transparent 0 35px, #edf2f3 36px); }
-    .chart-group { height: 100%; display: flex; align-items: end; gap: 3px; position: relative; }
-    .chart-group:after { content: attr(data-label); position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--muted); }
-    .bar { width: 8px; height: var(--h); min-height: 4px; border-radius: 3px 3px 0 0; background: var(--green); }.bar.cost { background: var(--purple); }.bar.profit { background: var(--amber); }
-    .two-col { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(240px,.75fr); gap: 15px; }
-    .form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
-    .form-grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
-    .field { min-width: 0; display: grid; gap: 5px; color: #526970; font-size: 10px; }
-    .field input, .field select, .field textarea { width: 100%; min-height: 36px; border: 1px solid #dfe8eb; border-radius: 5px; padding: 8px 9px; outline: none; background: #fff; color: var(--ink); font-size: 11px; }
-    .field textarea { resize: vertical; min-height: 72px; }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: #48a990; box-shadow: 0 0 0 3px #1ba57c18; }
-    .form-actions { display: flex; gap: 8px; align-items: center; margin-top: 15px; flex-wrap: wrap; }
-    .ingredient-list { display: grid; gap: 7px; margin: 11px 0; }
-    .ingredient-row { display: grid; grid-template-columns: minmax(120px,1.4fr) repeat(3,minmax(78px,1fr)) 30px; gap: 6px; align-items: center; }
-    .ingredient-row input { min-width: 0; width: 100%; height: 33px; border: 1px solid #dfe8eb; border-radius: 5px; padding: 6px 7px; font-size: 10px; }
-    .icon-button { display: grid; place-items: center; border: 0; border-radius: 5px; width: 30px; height: 30px; background: #fff0ef; color: var(--red); }
-    .totals { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 13px; }
-    .total-box { padding: 11px; border-radius: 5px; background: #eff8f6; }.total-box small { display: block; color: var(--muted); font-size: 9px; }.total-box strong { display: block; color: var(--forest-2); margin-top: 5px; font-size: 14px; }
-    .distribution { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 14px 0 18px; }
-    .pocket { border-radius: 6px; padding: 14px; min-height: 116px; }.pocket.green { background: var(--green-soft); color: #07815b; }.pocket.amber { background: var(--amber-soft); color: #b77900; }.pocket.blue { background: var(--blue-soft); color: #1478c5; }
-    .pocket small { font-size: 9px; }.pocket strong { display: block; margin: 12px 0 2px; font-size: 18px; }.pocket span { font-size: 10px; }
-    .status-line { font-size: 10px; min-height: 16px; color: var(--muted); }
-    .empty { padding: 24px 12px; text-align: center; color: var(--muted); font-size: 11px; }
-    .notice { border-radius: 5px; padding: 10px 12px; color: #3d6667; background: #edf8f6; font-size: 10px; line-height: 1.5; }
-    .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 13px; }
-    .toolbar .field { min-width: 180px; }
-    .tabs { display: flex; border-bottom: 1px solid var(--line); gap: 16px; margin: -2px 0 16px; overflow-x: auto; }
-    .tab { padding: 10px 3px; color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; white-space: nowrap; font-size: 10px; }
-    .tab.active { color: var(--forest-2); border-bottom-color: var(--green); font-weight: 700; }
-    .list-stack { display: grid; gap: 9px; }
-    .list-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
-    .list-row strong { display: block; font-size: 11px; }.list-row small { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; }
-    .conv-icon { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 6px; background: #edf6f5; color: var(--forest-2); font-size: 16px; }
-    .list-main { min-width: 0; flex: 1; display: flex; align-items: center; gap: 10px; }
-    .mobile-menu { display: none; border: 0; background: none; font-size: 19px; color: var(--forest); padding: 2px; }
-    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 9; max-width: min(360px, calc(100vw - 40px)); padding: 12px 16px; border-radius: 6px; background: #183b3b; color: white; box-shadow: 0 10px 30px #163b3b38; font-size: 11px; transform: translateY(15px); opacity: 0; pointer-events: none; transition: .2s; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .loading { color: var(--muted); font-size: 10px; }
-    footer { padding: 22px 0 0; color: #73898e; font-size: 9px; display: flex; justify-content: space-between; gap: 10px; }
-    @media (max-width: 1000px) { .shell { grid-template-columns: 190px minmax(0,1fr); }.sidebar { padding-inline: 10px; } main { padding-inline: 20px; }.topbar { padding-inline: 20px; }.stats { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-    @media (max-width: 720px) { .shell { display: block; }.sidebar { position: fixed; left: 0; top: 0; width: 240px; transform: translateX(-100%); transition: transform .2s; box-shadow: 12px 0 30px #082e2c35; }.sidebar.open { transform: translateX(0); }.mobile-menu { display: block; }.topbar { height: 56px; padding-inline: 14px; gap: 10px; }.top-date { display: none; }.search { width: auto; flex: 1; } main { padding: 18px 13px 26px; }.hero { grid-template-columns: 1fr; }.hero-art { display: none; }.hero-copy { padding: 20px; }.dashboard-grid,.two-col { grid-template-columns: 1fr; }.page-heading { align-items: flex-start; }.page-heading > .button { flex: 0 0 auto; }.form-grid.three { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-    @media (max-width: 460px) { h1 { font-size: 19px; }.stats { gap: 8px; }.stat { padding: 11px; min-height: 82px; }.stat strong { font-size: 16px; }.distribution { gap: 6px; }.pocket { padding: 10px; min-height: 105px; }.pocket strong { font-size: 15px; }.form-grid,.form-grid.three { grid-template-columns: 1fr; }.ingredient-row { grid-template-columns: minmax(85px,1.2fr) repeat(3,minmax(58px,1fr)) 28px; gap: 4px; }.ingredient-row input { padding: 5px 4px; font-size: 9px; }.totals { grid-template-columns: 1fr; }.top-action { display: none; } }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* Layout Shell */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #ffffff;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 50;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      margin-bottom: 22px;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+    .brand-titles h2 {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .brand-titles span {
+      font-size: 11px;
+      color: #a7f3d0;
+      font-weight: 500;
+      display: block;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #6ee7b7;
+      text-transform: uppercase;
+      margin: 16px 10px 8px;
+    }
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s ease;
+      width: 100%;
+    }
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+    .nav-btn.active {
+      background: #10b981;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .nav-btn .icon {
+      font-size: 16px;
+      width: 20px;
+      display: grid;
+      place-items: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .community-tag {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      color: #d1fae5;
+      line-height: 1.4;
+    }
+    .community-tag strong {
+      display: block;
+      color: #ffffff;
+      font-size: 12px;
+    }
+
+    /* Main Area */
+    .main-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Topbar */
+    .topbar {
+      height: 70px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .territory-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .mode-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .mode-pill.online {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+    .mode-pill.offline {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #3730a3;
+    }
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 8px 4px 4px;
+      background: #f1f5f9;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: #0d7968;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+    }
+
+    /* Content Area */
+    .content {
+      padding: 32px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header Cards */
+    .page-header {
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      color: var(--ink-muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(6, 78, 67, 0.25);
+    }
+    .btn-accent {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .btn-accent:hover {
+      background: #059669;
+    }
+    .btn-secondary {
+      background: var(--surface);
+      border-color: var(--surface-border);
+      color: var(--ink);
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Grid Layouts */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 26px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 26px;
+    }
+
+    /* Metric Cards */
+    .metric-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card.emerald { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+    .metric-card.indigo { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    .metric-card.amber { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    .metric-card.rose { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); }
+    
+    .metric-header {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .metric-val {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+    .metric-sub {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      background: #f8fafc;
+      color: var(--ink);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--surface-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: #f8fafc;
+      color: var(--ink-muted);
+      font-weight: 600;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--surface-border);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--surface-border);
+      color: var(--ink);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: #f1f5f9;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef3c7; color: #b45309; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .badge-info { background: #e0f2fe; color: #0369a1; }
+
+    /* Pocket Split Display */
+    .pocket-display {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .pocket-box {
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid;
+    }
+    .pocket-box.reinversion {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+    .pocket-box.hogar {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      color: #3730a3;
+    }
+    .pocket-box.reserva {
+      background: #fef3c7;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+    .pocket-val {
+      font-family: var(--font-heading);
+      font-size: 19px;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    /* Dynamic Comparison Box (Gota a Gota vs Banco Comunitario) */
+    .versus-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .versus-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      position: relative;
+    }
+    .versus-card.danger {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+    }
+    .versus-card.success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+    }
+    .versus-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Academic Report Section */
+    .academic-sheet {
+      background: #ffffff;
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .academic-header {
+      text-align: center;
+      border-bottom: 2px solid #064e43;
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+    }
+    .academic-header h1 {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      color: #064e43;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .academic-header h2 {
+      font-size: 15px;
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .academic-point {
+      margin-bottom: 32px;
+    }
+    .academic-point h3 {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      color: #064e43;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid #10b981;
+      padding-left: 12px;
+      margin-bottom: 12px;
+    }
+    .academic-point p {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.7;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+    .academic-highlight {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 12.5px;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: var(--radius-full);
+      transition: width 0.3s ease;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 9999;
+      display: none;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .topbar { padding: 0 16px; }
+      .content { padding: 20px 16px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .versus-container { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      .sidebar, .topbar, .btn, .nav-btn, .mode-pill { display: none !important; }
+      .app-shell { display: block; }
+      .content { padding: 0; }
+      .academic-sheet { box-shadow: none; border: none; padding: 0; }
+    }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand"><span class="brand-mark">✿</span><span><strong>MiPyme<br />Marruecos</strong><small>Red popular de gestión</small></span></div>
-      <div class="nav-label">Espacio de trabajo</div>
-      <nav class="nav-list" aria-label="Navegación principal">
-        <button class="nav-link active" data-page="inicio"><span class="nav-icon">⌂</span>Inicio</button>
-        <button class="nav-link" data-page="costeo"><span class="nav-icon">▤</span>Costeo</button>
-        <button class="nav-link" data-page="bolsillos"><span class="nav-icon">◉</span>Bolsillos</button>
-        <button class="nav-link" data-page="fiados"><span class="nav-icon">↗</span>Fiados</button>
-        <button class="nav-link" data-page="solidaria"><span class="nav-icon">♧</span>Red solidaria</button>
-        <button class="nav-link" data-page="conectividad"><span class="nav-icon">⌁</span>Conectividad</button>
-        <button class="nav-link" data-page="reportes"><span class="nav-icon">▥</span>Reportes</button>
-        <button class="nav-link" data-page="negocio"><span class="nav-icon">⚙</span>Mi negocio</button>
-      </nav>
-      <div class="sidebar-bottom"><div class="user-card"><span class="avatar" id="userInitials">MC</span><span><strong id="userNameSide">María González</strong><small>Comerciante</small></span></div></div>
+
+  <div class="app-shell">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand-box">
+        <div class="brand-icon">🌱</div>
+        <div class="brand-titles">
+          <h2>MiPyme Marruecos</h2>
+          <span>Red de Economía Solidaria</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Ecosistema Solidario</div>
+      <div class="nav-list">
+        <button class="nav-btn active" data-tab="tab-dashboard">
+          <span class="icon">📊</span>
+          <span>Panel General</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-costeo">
+          <span class="icon">🧁</span>
+          <span>Costeo & Margen Justo</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-bolsillos">
+          <span class="icon">💰</span>
+          <span>Regla de Bolsillos (60-30-10)</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-fiados">
+          <span class="icon">📒</span>
+          <span>Control de Fiados</span>
+        </button>
+      </div>
+
+      <div class="nav-section-title">Innovación Asociativa</div>
+      <div class="nav-list">
+        <button class="nav-btn" data-tab="tab-compras">
+          <span class="icon">🛒</span>
+          <span>Compras Colectivas (Escala)</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-fondo">
+          <span class="icon">🛡️</span>
+          <span>Banco Comunitario (Anti-Gota)</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-conectividad">
+          <span class="icon">🏛️</span>
+          <span>Ruta Institucional & QR</span>
+        </button>
+      </div>
+
+      <div class="nav-section-title">Evaluación & Academia</div>
+      <div class="nav-list">
+        <button class="nav-btn" data-tab="tab-academico">
+          <span class="icon">📜</span>
+          <span>Documento UCC Momento 2 y 3</span>
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="community-tag">
+          <strong>Parque Marruecos</strong>
+          <span>UPZ 55 • Localidad Rafael Uribe Uribe<br>ASOMARRUECOS (Ley 454/98)</span>
+        </div>
+      </div>
     </aside>
-    <div class="workspace">
+
+    <!-- MAIN AREA -->
+    <div class="main-wrapper">
+      
+      <!-- TOPBAR -->
       <header class="topbar">
-        <button class="mobile-menu" id="menuToggle" aria-label="Abrir menú">☰</button>
-        <div class="search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Buscar en MiPyme Marruecos..." aria-label="Buscar" /></div>
-        <span class="topbar-spacer"></span><span class="connection-status" id="connectionStatus" hidden></span><span class="top-date" id="todayLabel"></span>
-        <button class="top-action" id="refreshButton" title="Actualizar datos" aria-label="Actualizar">⟳</button><span class="avatar">MC</span>
+        <div class="topbar-left">
+          <div class="territory-badge">
+            <span>📍</span>
+            <span>Parque Marruecos, Bogotá D.C. — Caso 25</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div id="connectionModeBadge" class="mode-pill online" title="Haz clic para alternar modo">
+            <span id="connectionDot">🟢</span>
+            <span id="connectionText">Sincronizado con Backend</span>
+          </div>
+
+          <div class="user-profile-badge">
+            <div class="user-avatar" id="avatarInitial">DH</div>
+            <span id="topProfileName">Dulces Hermanas (Elena y Rocío)</span>
+          </div>
+        </div>
       </header>
-      <main>
-        <section class="page active" id="page-inicio">
-          <div class="hero"><div class="hero-copy"><p class="eyebrow">Parque Marruecos · Rafael Uribe Uribe</p><h2>¡Hola, <span id="welcomeName">María</span>!</h2><p>Juntos fortalecemos el comercio popular de nuestra comunidad.</p><button class="button" data-go="costeo">＋ Registrar producción</button></div><div class="hero-art" aria-hidden="true"><div class="market"><span></span><span></span><span></span><span></span><span></span><i></i></div></div></div>
-          <div class="stats">
-            <article class="stat green"><span class="stat-label">◉ Ventas del día</span><strong id="stat-sales">$0</strong><small id="salesDate">Cargando actividad</small></article>
-            <article class="stat purple"><span class="stat-label">▤ Bolsillo 1 · Insumos</span><strong id="stat-supplies">$0</strong><small>60% de las ventas</small></article>
-            <article class="stat amber"><span class="stat-label">⌂ Bolsillo 2 · Hogar</span><strong id="stat-home">$0</strong><small>30% de las ventas</small></article>
-            <article class="stat blue"><span class="stat-label">◈ Bolsillo 3 · Ahorro</span><strong id="stat-savings">$0</strong><small>10% de las ventas</small></article>
+
+      <!-- CONTENT BODY -->
+      <main class="content">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: DASHBOARD GENERAL                   -->
+        <!-- ========================================== -->
+        <section id="tab-dashboard" class="tab-pane active">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Panel de Control Solidario</h1>
+              <p class="page-subtitle">Monitoreo integral de costeo, ahorro asociativo y blindaje financiero territorial</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-secondary btn-sm" id="btnExportData">📥 Respaldar Datos</button>
+              <button class="btn btn-primary btn-sm" onclick="switchTab('tab-bolsillos')">+ Nuevo Cierre Diario</button>
+            </div>
           </div>
-          <div class="dashboard-grid">
-            <section class="card card-pad"><div class="section-title"><h2>Últimos registros</h2><button class="text-link" data-go="bolsillos">Ver historial →</button></div><div class="table-wrap"><table><thead><tr><th>FECHA</th><th>REGISTRO</th><th>VALOR</th><th>ESTADO</th></tr></thead><tbody id="recentRows"><tr><td colspan="4" class="loading">Cargando registros...</td></tr></tbody></table></div></section>
-            <section class="card card-pad"><div class="section-title"><h2>Actividad semanal</h2><div class="chart-legend"><span>Ventas</span><span>Insumos</span><span>Sustento</span></div></div><div class="chart" id="weekChart" aria-label="Gráfico de actividad semanal"></div></section>
+
+          <!-- Métricas -->
+          <div class="grid-4">
+            <div class="metric-card emerald">
+              <div class="metric-header">
+                <span>Venta Último Cierre</span>
+                <span>📅</span>
+              </div>
+              <div class="metric-val" id="dashMetricVenta">$140.000</div>
+              <div class="metric-sub">Distribuido automáticamente en 3 bolsillos</div>
+            </div>
+
+            <div class="metric-card amber">
+              <div class="metric-header">
+                <span>Ahorro Compras Colectivas</span>
+                <span>📉</span>
+              </div>
+              <div class="metric-val" id="dashMetricAhorro">$184.000</div>
+              <div class="metric-sub">31.5% de ahorro promedio mayorista</div>
+            </div>
+
+            <div class="metric-card indigo">
+              <div class="metric-header">
+                <span>Banco Comunitario</span>
+                <span>🛡️</span>
+              </div>
+              <div class="metric-val" id="dashMetricFondo">$1.850.000</div>
+              <div class="metric-sub">0% de interés usurero frente a gota a gota</div>
+            </div>
+
+            <div class="metric-card rose">
+              <div class="metric-header">
+                <span>Fiados por Cobrar</span>
+                <span>⏳</span>
+              </div>
+              <div class="metric-val" id="dashMetricFiados">$32.500</div>
+              <div class="metric-sub" id="dashMetricFiadosCount">2 cuentas pendientes con aviso</div>
+            </div>
           </div>
-          <footer><span>MiPyme Marruecos · Red Popular de Gestión y Costeo</span><span>Gestión · Solidaridad · Comunidad</span></footer>
+
+          <!-- Grids de contenido -->
+          <div class="grid-2">
+            <!-- Tarjeta de Compras Colectivas -->
+            <div class="card">
+              <div class="card-title">
+                <span>🛒 Compras Colectivas en Curso</span>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('tab-compras')">Ver todas</button>
+              </div>
+              <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 16px;">
+                Pedidos consolidados de quesos, harinas y empaques directos a mayoristas para reducir el costo por lote.
+              </p>
+              <div id="dashPurchasesList">
+                <!-- Se llena dinámicamente -->
+              </div>
+            </div>
+
+            <!-- Tarjeta de Banco Comunitario -->
+            <div class="card">
+              <div class="card-title">
+                <span>🛡️ Fondo Común Anti-Gota a Gota</span>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('tab-fondo')">Solicitar auxilio</button>
+              </div>
+              <div class="versus-card success" style="margin-bottom: 14px;">
+                <div style="font-weight: 700; font-size: 14px; color: #065f46;">Impacto Comunitario Comprobado:</div>
+                <div style="font-size: 12.5px; color: #047857; margin-top: 4px;">
+                  Doña Carmen (Empanadas La 48) financió $250.000 para reparar su freidora sin caer en agiotistas al 20% semanal, salvando su puesto y amortizando en cuotas solidarias.
+                </div>
+              </div>
+              <div id="dashFundMovements">
+                <!-- Se llena dinámicamente -->
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section class="page" id="page-costeo">
-          <div class="page-heading"><div><p class="eyebrow">Costeo frecuente</p><h1>Registro de lote de producción</h1><p class="subheading">Calcula el costo real de tus insumos y un precio sugerido para vender.</p></div></div>
-          <div class="two-col"><section class="card card-pad"><form id="costForm">
-            <div class="form-grid three"><label class="field">Nombre del producto<input id="productName" value="Cheesecake de fresa" required minlength="3" /></label><label class="field">Cantidad de porciones<input id="portionCount" type="number" min="1" step="1" value="12" required /></label><label class="field">Margen de ganancia (%)<input id="margin" type="number" min="0" max="500" step="1" value="40" /></label></div>
-            <div class="section-title" style="margin-top:22px"><h2>Insumos utilizados</h2><button class="button secondary small" type="button" id="addIngredient">＋ Agregar insumo</button></div>
-            <div class="ingredient-row" aria-hidden="true"><span class="loading">INSUMO</span><span class="loading">COMPRADO</span><span class="loading">PRECIO PAQUETE</span><span class="loading">USADO</span><span></span></div>
-            <div class="ingredient-list" id="ingredientList"></div>
-            <div class="totals"><div class="total-box"><small>Costo total del lote</small><strong id="costTotal">$0</strong></div><div class="total-box"><small>Costo por porción</small><strong id="unitCost">$0</strong></div><div class="total-box"><small>Precio sugerido</small><strong id="suggestedPrice">$0</strong></div></div>
-            <div class="form-actions"><button class="button" type="submit">Guardar y calcular</button><button class="button secondary" type="button" id="loadProducts">Ver lotes guardados</button><span class="status-line" id="costStatus"></span></div>
-          </form></section>
-          <aside class="card card-pad"><div class="section-title"><h2>Cómo se calcula</h2></div><p class="notice">El sistema prorratea cada ingrediente según la cantidad usada, suma el costo del lote y calcula el costo por porción. El precio sugerido aplica tu margen y redondea a $500 COP.</p><div class="section-title" style="margin-top:18px"><h2>Historial de productos</h2></div><div class="list-stack" id="productList"><div class="empty">Carga tus lotes guardados para consultarlos.</div></div></aside></div>
+        <!-- ========================================== -->
+        <!-- TAB 2: COSTEO & MARGEN JUSTO               -->
+        <!-- ========================================== -->
+        <section id="tab-costeo" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Módulo de Costeo Frecuente & Insumos</h1>
+              <p class="page-subtitle">Calcula el costo real por lote y porción individual, contrastando con el precio de compras colectivas</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Formulario de Costeo -->
+            <div class="card">
+              <div class="card-title">Nuevo Lote de Producción</div>
+              <form id="formCosteo">
+                <div class="form-group">
+                  <label class="form-label">Nombre del Producto / Especialidad</label>
+                  <input type="text" id="costeoNombre" class="form-control" value="Cheesecake Artesanal de Frutos Rojos" required>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">Porciones del Lote</label>
+                    <input type="number" id="costeoPorciones" class="form-control" value="12" min="1" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Margen de Ganancia (%)</label>
+                    <input type="number" id="costeoMargen" class="form-control" value="40" min="5" max="200" required>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="font-size: 13px;">Insumos e Ingredientes</strong>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnAddInsumo">+ Agregar Insumo</button>
+                </div>
+
+                <div id="insumosContainer" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
+                  <!-- Insumos dinámicos -->
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar Lote de Producción</button>
+              </form>
+            </div>
+
+            <!-- Resumen de Costeo y Comparativa de Ahorro Colectivo -->
+            <div class="card">
+              <div class="card-title">Resultados de Costeo & Ahorro por Escala</div>
+              
+              <div class="pocket-display" style="grid-template-columns: repeat(3, 1fr); margin-top: 0;">
+                <div class="pocket-box reinversion">
+                  <span style="font-size: 11px; font-weight: 600;">Costo Total Lote</span>
+                  <div class="pocket-val" id="calcCostoTotal">$18.000</div>
+                  <span style="font-size: 10px;">Materia prima directa</span>
+                </div>
+                <div class="pocket-box hogar">
+                  <span style="font-size: 11px; font-weight: 600;">Costo por Porción</span>
+                  <div class="pocket-val" id="calcCostoUnitario">$1.500</div>
+                  <span style="font-size: 10px;">Costo real de base</span>
+                </div>
+                <div class="pocket-box reserva">
+                  <span style="font-size: 11px; font-weight: 600;">Precio Venta Justo</span>
+                  <div class="pocket-val" id="calcPrecioSugerido">$2.500</div>
+                  <span style="font-size: 10px;">Con margen del 40%</span>
+                </div>
+              </div>
+
+              <!-- Comparador con Compra Colectiva Mayorista -->
+              <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; margin-top: 18px;">
+                <div style="font-weight: 700; font-size: 14px; color: #166534; display: flex; align-items: center; gap: 8px;">
+                  <span>🛒</span> Valor Agregado ASOMARRUECOS (Ahorro en Escala)
+                </div>
+                <p style="font-size: 12.5px; color: #15803d; margin: 8px 0;">
+                  Al comprar los insumos en bloque con otros comerciantes del Parque Marruecos a precios de distribuidor mayorista, el costo de este lote baja a <strong>$12.800 COP</strong>.
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px dashed #86efac;">
+                  <span style="font-size: 12px; color: #166534; font-weight: 600;">Ahorro neto por lote:</span>
+                  <span style="font-size: 16px; color: #15803d; font-weight: 800;">$5.200 COP (28.8%)</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px;">Lotes Registrados en el Sistema</h4>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Porciones</th>
+                        <th>Costo Lote</th>
+                        <th>Costo Unit.</th>
+                        <th>Precio Sug.</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tablaProductosBody">
+                      <!-- Llenado dinámico -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
 
-        <section class="page" id="page-bolsillos">
-          <div class="page-heading"><div><p class="eyebrow">Repartidor de bolsillos</p><h1>Cierre de caja diaria</h1><p class="subheading">Registra tus ventas y distribuye el dinero con la regla solidaria 60 / 30 / 10.</p></div></div>
-          <section class="card card-pad"><form id="closingForm"><div class="form-grid three"><label class="field">Venta total del día (COP)<input id="dailySales" type="number" min="0" step="1" value="120000" required /></label><label class="field">Fecha de cierre<input id="closingDate" type="date" required /></label><label class="field">Unidad productiva<input id="merchantId" value="unidad-parque-marruecos" required /></label></div><div class="distribution"><div class="pocket green"><small>◉ Bolsillo 1 · Reinversión en insumos</small><strong id="pocketSupply">$72.000</strong><span>60% de la venta</span></div><div class="pocket amber"><small>⌂ Bolsillo 2 · Ganancia / sustento hogar</small><strong id="pocketHome">$36.000</strong><span>30% de la venta</span></div><div class="pocket blue"><small>◈ Bolsillo 3 · Reserva y ahorro</small><strong id="pocketReserve">$12.000</strong><span>10% de la venta</span></div></div><div class="form-actions"><button class="button" type="submit">Guardar cierre</button><span class="status-line" id="closingStatus"></span></div></form></section>
-          <section class="card card-pad" style="margin-top:15px"><div class="section-title"><h2>Historial de cierres</h2><button class="button secondary small" id="reloadClosings" type="button">⟳ Actualizar</button></div><div class="table-wrap"><table><thead><tr><th>FECHA</th><th>VENTA TOTAL</th><th>60% INSUMOS</th><th>30% HOGAR</th><th>10% RESERVA</th></tr></thead><tbody id="closingRows"><tr><td colspan="5" class="loading">Cargando historial...</td></tr></tbody></table></div></section>
+        <!-- ========================================== -->
+        <!-- TAB 3: REPARTO DE BOLSILLOS (60-30-10)     -->
+        <!-- ========================================== -->
+        <section id="tab-bolsillos" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Módulo de Separación Financiera (Regla de Bolsillos)</h1>
+              <p class="page-subtitle">Protege el capital de trabajo y alimenta automáticamente el Fondo Común del Parque Marruecos</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Formulario de Cierre Diario -->
+            <div class="card">
+              <div class="card-title">Registrar Cierre de Ventas del Día</div>
+              <form id="formCierre">
+                <div class="form-group">
+                  <label class="form-label">Fecha del Cierre</label>
+                  <input type="date" id="cierreFecha" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Venta Total Recaudada en el Día (COP)</label>
+                  <input type="number" id="cierreVentaTotal" class="form-control" placeholder="120000" min="1000" step="500" value="120000" required>
+                </div>
+
+                <!-- Desglose en tiempo real -->
+                <div class="pocket-display">
+                  <div class="pocket-box reinversion">
+                    <span style="font-size: 11px; font-weight: 700;">Bolsillo 1 (60%)</span>
+                    <div class="pocket-val" id="prevPocket60">$72.000</div>
+                    <span style="font-size: 10px;">Reinversión e insumos de mañana</span>
+                  </div>
+                  <div class="pocket-box hogar">
+                    <span style="font-size: 11px; font-weight: 700;">Bolsillo 2 (30%)</span>
+                    <div class="pocket-val" id="prevPocket30">$36.000</div>
+                    <span style="font-size: 10px;">Sustento real del hogar</span>
+                  </div>
+                  <div class="pocket-box reserva">
+                    <span style="font-size: 11px; font-weight: 700;">Bolsillo 3 (10%)</span>
+                    <div class="pocket-val" id="prevPocket10">$12.000</div>
+                    <span style="font-size: 10px;">Reserva & Fondo Mutual</span>
+                  </div>
+                </div>
+
+                <div class="card" style="background: #fffbeb; border-color: #fde68a; margin-bottom: 18px;">
+                  <div style="font-size: 12px; color: #92400e; font-weight: 600;">
+                    🛡️ Destino del Bolsillo de Reserva ($12.000 COP):
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #b45309; margin-top: 6px;">
+                    <span>• Ahorro personal del comerciante (70%):</span>
+                    <strong id="prevAhorroPers">$8.400 COP</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #b45309; margin-top: 3px;">
+                    <span>• Aporte solidario al Banco Comunitario (30%):</span>
+                    <strong id="prevAporteMutual">$3.600 COP</strong>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar Cierre & Aportar al Fondo</button>
+              </form>
+            </div>
+
+            <!-- Historial de Cierres -->
+            <div class="card">
+              <div class="card-title">Historial de Cierres y Distribución Solidaria</div>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Venta Total</th>
+                      <th>Insumos (60%)</th>
+                      <th>Hogar (30%)</th>
+                      <th>Reserva (10%)</th>
+                      <th>Aporte Fondo</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaCierresBody">
+                    <!-- Llenado dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section class="page" id="page-fiados">
-          <div class="page-heading"><div><p class="eyebrow">Cuentas por cobrar</p><h1>Control de fiados y WhatsApp</h1><p class="subheading">Registra las cuentas pendientes y comparte recordatorios de pago cordiales.</p></div></div>
-          <div class="two-col"><section class="card card-pad"><div class="section-title"><h2>Registrar cuenta por cobrar</h2></div><form id="debtForm"><div class="form-grid"><label class="field">Nombre del cliente<input id="debtClient" placeholder="Nombre del cliente" required minlength="2" /></label><label class="field">WhatsApp (10 dígitos)<input id="debtPhone" type="tel" inputmode="numeric" placeholder="3001234567" required /></label><label class="field">Monto fiado (COP)<input id="debtAmount" type="number" min="1" step="1" placeholder="25000" required /></label><label class="field">Fecha límite de pago<input id="debtDue" type="date" required /></label></div><div class="form-actions"><button class="button" type="submit">Guardar fiado</button><span class="status-line" id="debtStatus"></span></div></form></section><section class="card card-pad"><div class="section-title"><h2>Deudas activas</h2><select id="debtFilter" aria-label="Filtrar deudas" style="border:1px solid var(--line);padding:7px;border-radius:5px;font-size:10px"><option value="true">Pendientes</option><option value="false">Todas</option></select></div><div class="list-stack" id="debtRows"><div class="loading">Cargando deudas...</div></div></section></div>
+        <!-- ========================================== -->
+        <!-- TAB 4: CONTROL DE FIADOS                   -->
+        <!-- ========================================== -->
+        <section id="tab-fiados" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Módulo de Control de Ventas a Crédito («Fiados»)</h1>
+              <p class="page-subtitle">Seguimiento de cartera en calle, fechas límites de pago y cobranza amigable por WhatsApp/Nequi</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Formulario Nuevo Fiado -->
+            <div class="card">
+              <div class="card-title">Registrar Nuevo Fiado</div>
+              <form id="formFiado">
+                <div class="form-group">
+                  <label class="form-label">Nombre del Cliente / Vecino</label>
+                  <input type="text" id="fiadoCliente" class="form-control" placeholder="Ej. Doña Marta (Puesto de frutas)" required>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">WhatsApp (sin + ni espacios)</label>
+                    <input type="text" id="fiadoTelefono" class="form-control" placeholder="573001112233" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Monto Fiado (COP)</label>
+                    <input type="number" id="fiadoMonto" class="form-control" placeholder="15000" min="500" step="500" required>
+                  </div>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">Concepto / Producto</label>
+                    <input type="text" id="fiadoConcepto" class="form-control" placeholder="2 cheesecakes" value="2 cheesecakes" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Fecha Límite de Pago</label>
+                    <input type="date" id="fiadoFechaLimite" class="form-control" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Registrar Cuenta por Cobrar</button>
+              </form>
+            </div>
+
+            <!-- Listado y Acciones -->
+            <div class="card">
+              <div class="card-title">
+                <span>Cuentas por Cobrar Registradas</span>
+                <span class="badge badge-warning" id="fiadosTotalBadge">Total: $0</span>
+              </div>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Monto</th>
+                      <th>Vence</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaFiadosBody">
+                    <!-- Llenado dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section class="page" id="page-solidaria">
-          <div class="page-heading"><div><p class="eyebrow">Asociatividad comunitaria</p><h1>Red solidaria</h1><p class="subheading">Organiza compras colectivas, cuida el fondo común y comparte saberes.</p></div></div>
-          <div class="tabs"><button class="tab active" data-solid-tab="compras">Compras colectivas</button><button class="tab" data-solid-tab="fondo">Fondo comunitario</button><button class="tab" data-solid-tab="encuentros">Círculos de saberes</button></div>
-          <div id="solid-compras" class="solid-panel"><div class="two-col"><section class="card card-pad"><div class="section-title"><h2>Crear compra colectiva</h2></div><form id="purchaseForm"><label class="field">Nombre de la compra<input id="purchaseTitle" value="Compra semanal de insumos" required minlength="5" /></label><div class="section-title" style="margin-top:14px"><h2>Pedidos de comerciantes</h2><button class="button secondary small" type="button" id="addOrder">＋ Añadir pedido</button></div><div class="ingredient-list" id="orderList"></div><div class="form-actions"><button class="button" type="submit">Consolidar pedidos</button><span class="status-line" id="purchaseStatus"></span></div></form></section><section class="card card-pad"><div class="section-title"><h2>Compras registradas</h2></div><div class="list-stack" id="purchaseRows"><div class="loading">Cargando...</div></div></section></div></div>
-          <div id="solid-fondo" class="solid-panel" hidden><div class="two-col"><section class="card card-pad"><div class="section-title"><h2>Fondo de ahorro mutuo</h2></div><p class="eyebrow">Saldo comunitario</p><h1 id="fundBalance">$0</h1><p class="subheading">Aportes desde la reserva diaria y préstamos solidarios sin intereses.</p><div class="notice" style="margin-top:16px">El fondo se alimenta automáticamente con una parte del bolsillo de reserva de cada cierre registrado.</div></section><section class="card card-pad"><div class="section-title"><h2>Solicitar préstamo solidario</h2></div><form id="loanForm"><div class="form-grid"><label class="field">Unidad productiva<input id="loanMerchant" value="unidad-parque-marruecos" required /></label><label class="field">Monto (COP)<input id="loanAmount" type="number" min="1" step="1" required /></label></div><label class="field" style="margin-top:12px">Motivo<input id="loanReason" placeholder="Describe brevemente la necesidad" /></label><div class="form-actions"><button class="button" type="submit">Solicitar préstamo</button><span class="status-line" id="loanStatus"></span></div></form></section></div><section class="card card-pad" style="margin-top:15px"><div class="section-title"><h2>Movimientos del fondo</h2></div><div class="table-wrap"><table><thead><tr><th>FECHA</th><th>MOVIMIENTO</th><th>COMERCIANTE</th><th>MONTO</th><th>SALDO</th></tr></thead><tbody id="fundRows"><tr><td colspan="5" class="loading">Cargando movimientos...</td></tr></tbody></table></div></section></div>
-          <div id="solid-encuentros" class="solid-panel" hidden><div class="two-col"><section class="card card-pad"><div class="section-title"><h2>Programar círculo de saberes</h2></div><form id="meetingForm"><div class="form-grid"><label class="field">Nombre del encuentro<input id="meetingTitle" placeholder="Taller de costeo comunitario" required /></label><label class="field">Fecha y hora<input id="meetingDate" type="datetime-local" required /></label><label class="field">Lugar<input id="meetingPlace" value="Parque Marruecos" /></label><label class="field">Cupo<input id="meetingCapacity" type="number" min="1" value="30" /></label></div><label class="field" style="margin-top:12px">Saberes a compartir<input id="meetingSkills" placeholder="Costeo, ventas, organización" /></label><div class="form-actions"><button class="button" type="submit">Agendar encuentro</button><span class="status-line" id="meetingStatus"></span></div></form></section><section class="card card-pad"><div class="section-title"><h2>Próximos encuentros</h2></div><div class="list-stack" id="meetingRows"><div class="loading">Cargando encuentros...</div></div></section></div></div>
+        <!-- ========================================== -->
+        <!-- TAB 5: COMPRAS COLECTIVAS (ESCALA)         -->
+        <!-- ========================================== -->
+        <section id="tab-compras" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Compras Colectivas e Insumos Compartidos</h1>
+              <p class="page-subtitle">Ahorro en escala por consolidación de pedidos entre comerciantes del Parque Marruecos</p>
+            </div>
+          </div>
+
+          <!-- Tarjeta Explicativa de Economía Solidaria -->
+          <div class="card" style="background: linear-gradient(135deg, #064e43 0%, #0d7968 100%); color: white; margin-bottom: 24px;">
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700;">¿Cómo funciona la compra colectiva en ASOMARRUECOS?</h3>
+            <p style="font-size: 13px; opacity: 0.9; margin: 8px 0 14px;">
+              En lugar de que cada comerciante compre individualmente a precios minoristas con altos costos de transporte, nos unimos 10 a 15 comerciantes para comprar a distribuidores mayoristas de Corabastos o Tequendama. Esto reduce directamente el costo de los insumos entre un <strong>25% y 35%</strong>, permitiendo aumentar las ganancias netas sin subirle el precio a los vecinos.
+            </p>
+            <div style="display: flex; gap: 20px; font-size: 12px; font-weight: 600;">
+              <span>✓ Queso crema: de $24.000/kg a $16.000/kg</span>
+              <span>✓ Empaques: de $320 c/u a $230 c/u</span>
+              <span>✓ Aceite 20L: de $152.000 a $130.000</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Consolidación de Pedidos en Curso -->
+            <div class="card">
+              <div class="card-title">Campañas de Compra Conjunta Activas</div>
+              <div id="comprasColectivasList">
+                <!-- Llenado dinámico -->
+              </div>
+            </div>
+
+            <!-- Formulario de Nuevo Pedido a la Compra Conjunta -->
+            <div class="card">
+              <div class="card-title">Sumar mi Pedido a la Compra Colectiva</div>
+              <form id="formPedidoColectivo">
+                <div class="form-group">
+                  <label class="form-label">Campaña de Compra</label>
+                  <select id="pedidoCampana" class="form-control" required>
+                    <option value="compra-col-01">Consolidación Mensual de Lácteos y Grasas</option>
+                    <option value="compra-col-02">Compra Masiva de Empaques Ecológicos</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nombre del Comerciante / Puesto</label>
+                  <input type="text" id="pedidoComerciante" class="form-control" value="Dulces Hermanas Marruecos" required>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">Insumo Requerido</label>
+                    <input type="text" id="pedidoInsumo" class="form-control" placeholder="Ej. Queso crema 5kg" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Cantidad y Unidad</label>
+                    <input type="text" id="pedidoCantidad" class="form-control" placeholder="5000 g" required>
+                  </div>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">Precio Minorista Habitual (COP)</label>
+                    <input type="number" id="pedidoPrecioRetail" class="form-control" placeholder="120000" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Precio Mayorista Colectivo (COP)</label>
+                    <input type="number" id="pedidoPrecioMayorista" class="form-control" placeholder="80000" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Agregar a la Lista Colectiva</button>
+              </form>
+            </div>
+          </div>
         </section>
 
-        <section class="page" id="page-conectividad"><div class="page-heading"><div><p class="eyebrow">Oportunidades públicas</p><h1>Conectividad distrital</h1><p class="subheading">Convocatorias, acompañamiento y rutas de fortalecimiento para tu negocio.</p></div><button class="button secondary" id="reloadCalls">⟳ Actualizar</button></div><div class="list-stack" id="callRows"><div class="loading">Cargando convocatorias...</div></div></section>
+        <!-- ========================================== -->
+        <!-- TAB 6: BANCO COMUNITARIO (ANTI-GOTA A GOTA) -->
+        <!-- ========================================== -->
+        <section id="tab-fondo" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Círculo de Ahorro Solidario & Banco Comunitario</h1>
+              <p class="page-subtitle">Fondo rotatorio de autogestión mutual para erradicar el flagelo extorsivo del «gota a gota» en el Parque Marruecos</p>
+            </div>
+          </div>
 
-        <section class="page" id="page-reportes"><div class="page-heading"><div><p class="eyebrow">Resumen del negocio</p><h1>Reportes y estadísticas</h1><p class="subheading">Indicadores calculados a partir de tus ventas, costeo y cuentas registradas.</p></div><button class="button secondary" id="reloadReports">⟳ Actualizar datos</button></div><div class="stats"><article class="stat green"><span class="stat-label">Ventas registradas</span><strong id="reportSales">$0</strong><small>Acumulado de cierres disponibles</small></article><article class="stat purple"><span class="stat-label">Lotes costeados</span><strong id="reportProducts">0</strong><small>Productos registrados</small></article><article class="stat amber"><span class="stat-label">Fiados pendientes</span><strong id="reportDebts">$0</strong><small id="reportDebtCount">0 cuentas</small></article><article class="stat blue"><span class="stat-label">Fondo comunitario</span><strong id="reportFund">$0</strong><small>Saldo compartido</small></article></div><section class="card card-pad"><div class="section-title"><h2>Distribución acumulada de ventas</h2></div><div class="distribution"><div class="pocket green"><small>Reinversión · 60%</small><strong id="reportSupply">$0</strong><span>Insumos y producción</span></div><div class="pocket amber"><small>Sustento · 30%</small><strong id="reportHome">$0</strong><span>Ganancia del hogar</span></div><div class="pocket blue"><small>Reserva · 10%</small><strong id="reportReserve">$0</strong><span>Ahorro y fondo</span></div></div><p class="notice">Los reportes usan el historial que entrega el API. El sistema no estima datos ausentes ni reemplaza registros contables.</p></section></section>
+          <!-- Comparativa Visual: Gota a Gota vs Banco Comunitario -->
+          <div class="versus-container">
+            <div class="versus-card danger">
+              <div class="versus-title" style="color: #9f1239;">
+                <span>⚠️</span> Crédito Informal «Gota a Gota» (Agiotistas)
+              </div>
+              <p style="font-size: 13px; color: #881337; margin-bottom: 12px;">
+                Cobra intereses abusivos del <strong>20% al 30% mensual</strong> con cobro diario coercitivo, violencia psicológica o armada y pérdida de herramientas de trabajo.
+              </p>
+              <div class="card" style="background: white; padding: 12px; font-size: 12px; border-color: #fecdd3;">
+                <div>• Préstamo: <strong>$200.000 COP</strong></div>
+                <div>• Interés usurero cobrado: <strong>$40.000 COP (20%)</strong></div>
+                <div>• Total a pagar en 24 días: <strong>$240.000 COP ($10.000 diarios)</strong></div>
+                <div style="color: #b91c1c; font-weight: 700; margin-top: 6px;">❌ Descapitaliza el negocio y quita la tranquilidad familiar.</div>
+              </div>
+            </div>
 
-        <section class="page" id="page-negocio"><div class="page-heading"><div><p class="eyebrow">Preferencias locales</p><h1>Mi negocio</h1><p class="subheading">Personaliza el nombre visible en este dispositivo.</p></div></div><section class="card card-pad" style="max-width:620px"><form id="profileForm"><div class="form-grid"><label class="field">Nombre del comerciante<input id="profileName" required /></label><label class="field">Nombre del negocio<input id="profileBusiness" required /></label></div><p class="notice" style="margin-top:15px">Esta información se guarda solo en este navegador. El API actual no tiene un endpoint de perfil ni autenticación de comerciantes.</p><div class="form-actions"><button class="button" type="submit">Guardar preferencias</button><span class="status-line" id="profileStatus"></span></div></form></section></section>
+            <div class="versus-card success">
+              <div class="versus-title" style="color: #065f46;">
+                <span>🛡️</span> Banco Comunitario Mutual ASOMARRUECOS
+              </div>
+              <p style="font-size: 13px; color: #047857; margin-bottom: 12px;">
+                Nutrido con el <strong>10% del bolsillo de reserva</strong> de los comerciantes. Otorga microcréditos de emergencia solidaria a <strong>0% de interés de usura</strong>.
+              </p>
+              <div class="card" style="background: white; padding: 12px; font-size: 12px; border-color: #a7f3d0;">
+                <div>• Préstamo: <strong>$200.000 COP</strong></div>
+                <div>• Interés de usura: <strong>$0 COP (Solidario)</strong></div>
+                <div>• Aporte simbólico al fondo: <strong>$1.000 COP voluntario</strong></div>
+                <div>• Total a pagar: <strong>$201.000 COP en 4 semanas</strong></div>
+                <div style="color: #15803d; font-weight: 700; margin-top: 6px;">✓ Protege la maquinaria, genera autogestión y fortalece la comunidad.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Solicitar Auxilio Mutual -->
+            <div class="card">
+              <div class="card-title">Solicitud de Microcrédito de Emergencia Mutual</div>
+              <form id="formPrestamoMutual">
+                <div class="form-group">
+                  <label class="form-label">Nombre del Asociado / Puesto</label>
+                  <input type="text" id="prestamoComerciante" class="form-control" value="Dulces Hermanas Marruecos" required>
+                </div>
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label">Monto Solicitado (COP)</label>
+                    <input type="number" id="prestamoMonto" class="form-control" placeholder="150000" min="20000" max="600000" step="10000" required>
+                  </div>
+                  <div>
+                    <label class="form-label">Plazo de Reintegro (Semanas)</label>
+                    <select id="prestamoPlazo" class="form-control" required>
+                      <option value="2">2 Semanas</option>
+                      <option value="4" selected>4 Semanas</option>
+                      <option value="6">6 Semanas</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Motivo de Emergencia (Herramienta, Insumos, Salud)</label>
+                  <input type="text" id="prestamoMotivo" class="form-control" placeholder="Reparación urgente de horno para hornear postres" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Aprobar Crédito Comunitario (0% Usura)</button>
+              </form>
+            </div>
+
+            <!-- Movimientos del Fondo -->
+            <div class="card">
+              <div class="card-title">
+                <span>Libro Mayor del Fondo Solidario</span>
+                <span class="badge badge-success" id="fondoSaldoBadge">Saldo: $1.850.000</span>
+              </div>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Tipo</th>
+                      <th>Comerciante</th>
+                      <th>Monto</th>
+                      <th>Concepto</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaFondoBody">
+                    <!-- Llenado dinámico -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 7: CONECTIVIDAD INSTITUCIONAL & QR     -->
+        <!-- ========================================== -->
+        <section id="tab-conectividad" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Ruta de Conectividad Institucional & Distrital</h1>
+              <p class="page-subtitle">Acceso directo a capital semilla no reembolsable, ferias del IPES y programas de la Alcaldía Local de Rafael Uribe Uribe</p>
+            </div>
+          </div>
+
+          <div class="grid-3" id="convocatoriasContainer">
+            <!-- Llenado dinámico con códigos QR escaneables -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 8: DOCUMENTO ACADÉMICO UCC (MOMENTO 2) -->
+        <!-- ========================================== -->
+        <section id="tab-academico" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Documento Académico Corregido y Estructurado</h1>
+              <p class="page-subtitle">Respuesta rigurosa punto por punto a la retroalimentación del docente • Nivel Abstracto Ampliado • Normas APA 7ma Edición</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+          </div>
+
+          <div class="academic-sheet">
+            
+            <div class="academic-header">
+              <h1>UNIVERSIDAD COOPERATIVA DE COLOMBIA</h1>
+              <h2>Curso Institucional III: Laboratorio en Gestión Solidaria</h2>
+              <div style="font-size: 13px; color: #064e43; font-weight: 700; margin-top: 8px;">
+                Evaluación del Momento 2 & Preparación Momento 3: Problemas que se vuelven soluciones solidarias
+              </div>
+            </div>
+
+            <!-- Punto 1: Integrantes -->
+            <div class="academic-point">
+              <h3>1. Descripción de Integrantes del Equipo Colaborativo</h3>
+              <div class="table-container" style="margin-top: 10px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Curso</th>
+                      <th>Apellidos y Nombres</th>
+                      <th>ID</th>
+                      <th>Campus</th>
+                      <th>Programa</th>
+                      <th>Contacto Institucional</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>2226</td>
+                      <td><strong>Fuentes de la Ossa, Lisleidis Millenys</strong></td>
+                      <td>544024</td>
+                      <td>Santa Marta</td>
+                      <td>Enfermería</td>
+                      <td>Lisleidis.fuentes@campusucc.edu.co</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>2226</td>
+                      <td><strong>López y López Celis, Luisa</strong></td>
+                      <td>833543</td>
+                      <td>Pasto</td>
+                      <td>Derecho</td>
+                      <td>Luisa.lopezylopezc@campusucc.edu.co • Cel: 316 060 6269</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>2226</td>
+                      <td><strong>Rodríguez Quintero, Juan Camilo</strong></td>
+                      <td>789456</td>
+                      <td>Bogotá</td>
+                      <td>Ingeniería de Sistemas</td>
+                      <td>juan.rodriguezqui@campusucc.edu.co</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Punto 2: Número de Caso -->
+            <div class="academic-point">
+              <h3>2. Número y Nombre del Caso de Estudio</h3>
+              <p>
+                <strong>Caso No. 25:</strong> <em>«Débil gestión administrativa y financiera en las unidades productivas y emprendimientos informales de la economía popular del Parque Marruecos y sus alrededores»</em>.
+              </p>
+              <div class="academic-highlight">
+                <strong>Ubicación Geográfica y Contexto Territorial Preciso:</strong><br>
+                El caso se localiza en el <strong>Parque Marruecos</strong> y su corredor comercial perimetral, ubicado en la <strong>Carrera 5J con Calle 48U Sur y Calle 49B Sur</strong>, correspondiente a la <strong>UPZ 55 Marruecos</strong>, en la <strong>Localidad 18 de Rafael Uribe Uribe, Bogotá D.C., Colombia</strong>. Este territorio es un nodo neurálgico de economía popular donde convergen unidades familiares dedicadas a la elaboración artesanal de alimentos (postres, cheesecakes, arepas, empanadas), confecciones y comercio informal callejero.
+              </div>
+            </div>
+
+            <!-- Punto 3: Problema Reformulado -->
+            <div class="academic-point">
+              <h3>3. Definición Integral del Problema con Enfoque en la Economía Solidaria</h3>
+              <p>
+                <strong>Problema Actualizado y Articulado:</strong> Inexistencia de una estructura organizativa de economía social y solidaria que vincule a las unidades productivas informales del Parque Marruecos, lo que perpetúa una <strong>débil gestión administrativa-financiera</strong> caracterizada por la ausencia de registros de costeo técnico, la mezcla indiscriminada del presupuesto familiar con el capital de trabajo (descapitalización cotidiana), el otorgamiento informal de créditos («fiados») sin seguimiento de cartera y el total aislamiento individual de los comerciantes.
+              </p>
+              <p>
+                Este aislamiento genera dos consecuencias estructurales no evidentes que vulneran la sostenibilidad de la comunidad:
+              </p>
+              <ul style="padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 12px;">
+                <li><strong>Sobrecosto de Insumos por Desarticulación Comercial:</strong> Al operar de forma desarticulada, cada vendedor compra pequeñas cantidades a intermediarios minoristas a precios elevados, reduciendo su margen de rentabilidad a niveles de subsistencia.</li>
+                <li><strong>Trampa de Endeudamiento con Prestamistas Informales («Gota a Gota»):</strong> Ante imprevistos operativos (rotura de un horno, daño de una freidora o calamidad de salud), los comerciantes no cuentan con acceso al sistema financiero tradicional ni con un fondo común de reserva, viéndose forzados a recurrir a redes extorsivas de agiotismo («gota a gota») que cobran intereses del 20% al 30% mensual bajo intimidación constante.</li>
+              </ul>
+            </div>
+
+            <!-- Punto 4: Tres Ideas de Solución -->
+            <div class="academic-point">
+              <h3>4. Explicación de las 3 Ideas de Solución Evaluadas</h3>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Alternativa</th>
+                      <th>Descripción Operativa</th>
+                      <th>Aporte a la Comunidad</th>
+                      <th>Criterio de Selección / Descarte</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Idea 1: Software Contable Tradicional (SaaS)</strong></td>
+                      <td>Plataforma web formal de contabilidad por partida doble con facturación electrónica y balances contables avanzados.</td>
+                      <td>Brindaría formalidad y reportería contable estandarizada para entidades tributarias.</td>
+                      <td><span class="badge badge-danger">Descartada</span>: Altas tarifas de suscripción mensual y una curva de aprendizaje técnica inalcanzable para comerciantes populares en calle.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Idea 2: Red Popular ASOMARRUECOS (Híbrida & Solidaria)</strong></td>
+                      <td>Servicio-herramienta integrado: libreta de bolsillo física + web interactiva adaptada al lenguaje popular (bolsillos, fiados, compras en escala) respaldada por una Asociación Mutual.</td>
+                      <td>Elimina la descapitalización diaria, genera compras conjuntas a precios mayoristas y protege contra el gota a gota mediante un fondo mutual.</td>
+                      <td><span class="badge badge-success">Seleccionada</span>: Pertinente, de bajísima complejidad, respeta las rutinas callejeras e integra los principios de la Ley 454 de 1998.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Idea 3: Talleres Teóricos Magistrales en Salón Comunal</strong></td>
+                      <td>Ciclo semanal de capacitaciones académicas sobre finanzas empresariales dictadas en el quiosco del barrio.</td>
+                      <td>Transmisión de conceptos teóricos de microeconomía y finanzas básicas.</td>
+                      <td><span class="badge badge-danger">Descartada</span>: Los comerciantes dividen su jornada completa entre la preparación de insumos, la venta en el puesto y el cuidado del hogar; no tienen tiempo disponible para asistir a clases teóricas.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Punto 5: Economía Solidaria -->
+            <div class="academic-point">
+              <h3>5. Sustentación de la Organización de Economía Solidaria</h3>
+              <p>
+                La solución trasciende el concepto genérico de "unidad asociativa" y se formaliza bajo la tipología de <strong>Asociación Mutual</strong>, amparada jurídicamente en Colombia por la <strong>Ley 454 de 1998</strong> (Marco Conceptual de la Economía Solidaria) y la <strong>Ley 2143 de 2021</strong> (Régimen Legal de Asociaciones Mutuales):
+              </p>
+              <div class="academic-highlight">
+                <strong>Denominación Oficial:</strong> Asociación Mutual de Emprendedores y Productores Populares del Parque Marruecos (<strong>ASOMARRUECOS</strong>).<br>
+                <strong>Estructura Orgánica y Autogestión:</strong>
+                <ul style="margin-top: 6px; padding-left: 18px;">
+                  <li><strong>Asamblea General de Asociados:</strong> Máxima autoridad democrática donde rige el principio cooperativo de <em>«una persona, un voto»</em>, sin privilegios por capital aportado.</li>
+                  <li><strong>Junta Directiva y Comité de Compras:</strong> Elegidos democráticamente para coordinar la consolidación de pedidos mayoristas directos a Corabastos.</li>
+                  <li><strong>Junta de Control Social y Comité de Auxilio Mutuo:</strong> Administra el Fondo Rotatorio Comunitario para vigilar que los créditos de contingencia se asignen con equidad, cero usura y transparencia.</li>
+                  <li><strong>Patrimonio Social Común e Irrepartible:</strong> Conforme al artículo 18 de la Ley 454/98, el fondo social acumulado no pertenece individualmente a nadie, sino a la protección de todos los asociados frente a imprevistos.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Punto 6: Prototipo -->
+            <div class="academic-point">
+              <h3>6. Esquematización y Explicación del Prototipo Integral</h3>
+              <p>
+                El prototipo constituye un sistema sociotécnico de <strong>doble canal</strong> que combina la practicidad física en el puesto con la automatización digital en el dispositivo móvil:
+              </p>
+              <ul style="padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.6;">
+                <li><strong>Canal Físico (Libreta de Bolsillo y Matriz Visual de Alto Contraste):</strong> Cuadernillo plastificado de bolsillo con casillas de colores vivos para que las productoras de cheesecakes anoten rápidamente durante las horas de mayor afluencia de clientes sin temor a dañar sus teléfonos.</li>
+                <li><strong>Canal Digital (Aplicación Web Progresiva PWA / Standalone):</strong> Organizada en módulos sinérgicos:
+                  <ol style="margin-top: 4px; padding-left: 18px;">
+                    <li><em>Costeo Frecuente:</em> Insumos comprados vs. utilizados, costo por porción y sugerencia de precio con 40% de ganancia real.</li>
+                    <li><em>Repartidor de Bolsillos Inteligente:</em> Aplica la regla 60% reinversión, 30% sustento familiar y 10% reserva solidaria (nutriendo el banco común).</li>
+                    <li><em>Control de Fiados con Alerta Nequi/Daviplata:</em> Semáforo de vencimiento y generación de mensajes amigables con hipervínculo de cobro.</li>
+                    <li><em>Panel de Compras Colectivas ASOMARRUECOS:</em> Consolidación colaborativa de pedidos mayoristas.</li>
+                    <li><em>Banco Comunitario:</em> Solicitud de créditos de auxilio mutuo al 0% de interés usurero.</li>
+                  </ol>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Punto 7: Valor Diferencial e Innovación Incremental -->
+            <div class="academic-point">
+              <h3>7. Valor Diferencial y Dimensión de Innovación Incremental</h3>
+              <p>
+                La innovación incremental no radica en introducir tecnologías complejas que perturben la cotidianidad barrial, sino en <strong>reconfigurar prácticas populares preexistentes</strong> (la libreta de apuntes, los fiados de memoria y el préstamo informal) hacia un modelo solidario formalizado:
+              </p>
+              <div class="grid-2" style="margin-top: 14px;">
+                <div class="card" style="background: #f8fafc;">
+                  <strong style="color: #064e43; font-size: 13.5px; display: block; margin-bottom: 6px;">1. Compras Colectivas e Insumos Compartidos (Ahorro en Escala)</strong>
+                  <p style="font-size: 12px; color: #475569; line-height: 1.5;">
+                    En lugar de compras aisladas y costosas, la herramienta consolida la demanda de insumos comunes (queso crema, mantequilla, galletas, empaques, aceites). Comprar por bultos o bloques industriales de 5kg o 10kg en Corabastos genera un ahorro directo del <strong>28% al 35%</strong> por lote, lo cual ensancha el margen de ganancia de las hermanas productoras sin elevar el precio final de $2.500 COP por porción de cheesecake.
+                  </p>
+                </div>
+                <div class="card" style="background: #f8fafc;">
+                  <strong style="color: #064e43; font-size: 13.5px; display: block; margin-bottom: 6px;">2. Círculo de Ahorro y Banco Comunitario (Frente al «Gota a Gota»)</strong>
+                  <p style="font-size: 12px; color: #475569; line-height: 1.5;">
+                    El 10% del bolsillo de reserva alimenta un fondo rotatorio de auxilio mutuo. Cuando a una productora se le avería un congelador o freidora, no queda a merced del cobro extorsivo del agiotista (que exigiría 20% mensual bajo amenazas), sino que accede a un microcrédito solidario a <strong>tasa cero o interés simbólico</strong>, amortizable con el propio flujo diario del puesto.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Punto 8: Evidencias de Co-Diseño -->
+            <div class="academic-point">
+              <h3>8. Evidencias de Trabajo Comunitario, Validación y Co-Diseño Territorial</h3>
+              <div class="academic-highlight">
+                <strong>Ubicación de Trabajo de Campo:</strong> Quiosco comunal y puestos perimetrales del Parque Marruecos (Carrera 5J con Calle 48U Sur, Bogotá D.C.).<br>
+                <strong>Actores Participantes:</strong>
+                Elena Fuentes y Rocío Fuentes (productoras de cheesecakes artesanales), Don Horacio Peña (productor de arepas de chócolo), Doña Carmen Valdés (empanadas) y Don Gustavo Pardo (líder de comerciantes populares del sector).
+              </div>
+              <p>
+                <strong>Metodología de Validación y Diálogo de Saberes:</strong> Se llevó a cabo una sesión de prueba guiada del prototipo en el mismo puesto de trabajo. Lejos de limitarse a una encuesta estática, se ejecutó un proceso de <strong>co-diseño dialógico</strong> donde la propuesta fue compartida, cuestionada y sustancialmente ajustada a partir de los aportes de las productoras:
+              </p>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Actor Comunitario</th>
+                      <th>Percepción / Aporte Inicial</th>
+                      <th>Retroalimentación Crítica</th>
+                      <th>Ajuste Real Implementado en el Prototipo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Elena y Rocío Fuentes (Cheesecakes)</strong></td>
+                      <td>Validaron como indispensable la Regla de Bolsillos (60%-30%-10%), confesando que antes gastaban todo el ingreso en mercado diario y quedaban sin capital para el queso crema.</td>
+                      <td>Explicaron que la pantalla del celular se vuelve ilegible bajo el sol del parque y que a veces olvidaban cuándo cobrar a los vecinos.</td>
+                      <td>Se implementó la libreta de apoyo físico con casillas de alto contraste y se añadió en el módulo de fiados el <strong>semáforo de fecha límite de pago</strong> con enlace directo a WhatsApp/Nequi.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Don Gustavo Pardo (Líder Comerciante)</strong></td>
+                      <td>Destacó que el mayor problema del sector no es solo saber costear, sino el temor a que los agiotistas («gota a gota») se queden con el producido de la gente.</td>
+                      <td>Requirió un mecanismo colectivo donde los propios comerciantes puedan prestarse para emergencias sin usura.</td>
+                      <td>Se incorporó el <strong>Módulo 5: Banco Comunitario y Círculo de Ahorro Mutual</strong> con reglas de crédito rotatorio y libro mayor transparente.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Doña Carmen Valdés (Empanadas)</strong></td>
+                      <td>Notó que el aceite y los empaques se encarecen constantemente al comprarlos en la tienda esquinera.</td>
+                      <td>Propuso que la compra de queso y empaques se haga entre varios puestos para obtener descuento mayorista.</td>
+                      <td>Se construyó el <strong>Módulo 4: Compras Colectivas e Insumos Compartidos</strong>, demostrando un ahorro del 31.5% en Corabastos.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Referencias APA 7 -->
+            <div class="academic-point" style="border-top: 2px solid #e2e8f0; padding-top: 24px;">
+              <h3>Referencias Bibliográficas (Normas APA Versión 7)</h3>
+              <ul style="list-style: none; padding-left: 0; font-size: 12px; color: #475569; line-height: 1.8;">
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Alcaldía Mayor de Bogotá. (2023). <em>Caracterización de la economía popular y social en la Localidad 18 de Rafael Uribe Uribe</em>. Secretaría Distrital de Desarrollo Económico e Instituto para la Economía Social (IPES). https://www.ipes.gov.co
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Congreso de la República de Colombia. (1998, 4 de agosto). <em>Ley 454 de 1998: Por la cual se determina el marco conceptual que regula la economía solidaria, se transforma el Departamento Administrativo Nacional de Cooperativas en el Departamento Administrativo Nacional de la Economía Solidaria (DANSOCIAL)...</em> Diario Oficial No. 43.357.
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Congreso de la República de Colombia. (2021, 14 de julio). <em>Ley 2143 de 2021: Por medio de la cual se regula el régimen de las Asociaciones Mutuales y se dictan otras disposiciones</em>. Diario Oficial No. 51.735.
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Coraggio, J. L. (2018). <em>La economía social y solidaria ante la pobreza, la desigualdad y la exclusión</em>. Universidad Nacional de General Sarmiento (UNGS).
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Departamento Administrativo Nacional de Estadística [DANE]. (2023). <em>Medición de la economía popular en micronegocios y actividades informales en Colombia</em>. Boletín Técnico DANE. https://www.dane.gov.co
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Razeto, L. (2010). <em>Lecciones de economía solidaria: Hacia una nueva civilización económica</em>. Ediciones Uvirtual.
+                </li>
+                <li style="margin-bottom: 8px; text-indent: -24px; padding-left: 24px;">
+                  Universidad Cooperativa de Colombia [UCC]. (2022). <em>Resolución 116 de 2022: Criterios de evaluación por competencias y niveles de desempeño en cursos institucionales</em>. Vicerrectoría Académica UCC.
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
       </main>
+
     </div>
   </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script>
-    const API = '/api';
-    const COP = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
-    const today = new Date();
-    const dateOnly = (date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
-    const $ = (selector, root = document) => root.querySelector(selector);
-    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-    const state = { closings: [], products: [], debts: [], fund: { saldo: 0, movimientos: [] }, purchases: [], meetings: [], calls: [] };
-    const money = (value) => COP.format(Number(value) || 0);
-    const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-    let toastTimer;
-    let localMode = false;
 
-    async function request(path, options = {}) {
-      if (localMode) return localRequest(options.method || 'GET', path, options);
-      let response;
-      try {
-        response = await fetch(`${API}${path}`, { ...options, headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
-      } catch {
-        enableLocalMode();
-        return localRequest(options.method || 'GET', path, options);
-      }
-      if (response.status === 404 || response.status === 501) {
-        enableLocalMode();
-        return localRequest(options.method || 'GET', path, options);
-      }
-      let payload;
-      try { payload = await response.json(); } catch { throw new Error(`El servidor respondió sin datos (${response.status}).`); }
-      if (!response.ok || payload.success === false) throw new Error(payload.message || payload.error || `Error ${response.status}`);
-      return Object.prototype.hasOwnProperty.call(payload, 'data') ? payload.data : payload;
+  <!-- Toast Notification -->
+  <div id="toastBox" class="toast-box">Acción completada con éxito</div>
+
+  <!-- SCRIPT DE APLICACIÓN -->
+  <script>
+    // Variables globales
+    const store = window.MiPymeModels ? window.MiPymeModels.store : null;
+    const calc = window.MiPymeModels ? window.MiPymeModels.calc : null;
+    let isBackendOnline = false;
+
+    // Toast
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
     }
-    function enableLocalMode() {
-      if (localMode) return;
-      localMode = true;
-      try {
-        const saved = JSON.parse(localStorage.getItem('mipyme-offline-data') || '{}');
-        for (const key of ['closings','products','debts','purchases','meetings','calls']) {
-          if (Array.isArray(saved[key])) state[key] = saved[key];
-        }
-        if (saved.fund && Array.isArray(saved.fund.movimientos)) state.fund = saved.fund;
-      } catch { localStorage.removeItem('mipyme-offline-data'); }
-      const badge = $('#connectionStatus');
-      badge.hidden = false;
-      badge.textContent = 'Modo local · datos en este navegador';
-      badge.title = 'El API no está disponible. Los registros se guardan en este navegador.';
+
+    // Formateador de moneda
+    function formatMoney(amount) {
+      const num = Number(amount) || 0;
+      return '$' + num.toLocaleString('es-CO');
     }
-    function saveLocalData() {
-      localStorage.setItem('mipyme-offline-data', JSON.stringify({
-        closings: state.closings, products: state.products, debts: state.debts,
-        fund: state.fund, purchases: state.purchases, meetings: state.meetings, calls: state.calls,
-      }));
-    }
-    function localRequest(method, path, options = {}) {
-      const [route, query = ''] = path.split('?');
-      const body = options.body ? JSON.parse(options.body) : {};
-      const id = () => globalThis.crypto?.randomUUID?.() || `local-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-      const recordFund = (movement) => {
-        state.fund.movimientos.unshift(movement);
-        state.fund.saldo = movement.saldoResultante;
-      };
-      if (method === 'GET' && route === '/bolsillos/historial') return state.closings;
-      if (method === 'POST' && route === '/bolsillos/cierre-diario') {
-        const fechaCierre = body.fechaCierre || dateOnly(new Date());
-        if (state.closings.some((row) => row.fechaCierre === fechaCierre && row.comercianteId === body.comercianteId)) throw new Error('Ya existe un cierre para esta unidad y fecha.');
-        const venta = Math.round(Number(body.ventaTotalDia));
-        if (!Number.isFinite(venta) || venta < 0) throw new Error('La venta debe ser un valor válido mayor o igual a cero.');
-        const reinversion = Math.round(venta * .6), sustento = Math.round(venta * .3), reserva = venta - reinversion - sustento;
-        const row = { id: id(), comercianteId: body.comercianteId, fechaCierre, ventaTotalDia: venta, bolsilloReinversion: reinversion, bolsilloSustento: sustento, bolsilloReserva: reserva, aporteFondoComunitario: Math.round(reserva * .1), createdAt: new Date().toISOString() };
-        state.closings.unshift(row);
-        if (row.aporteFondoComunitario > 0) recordFund({ id: id(), tipoMovimiento: 'APORTE', monto: row.aporteFondoComunitario, comercianteId: row.comercianteId, registroDiarioId: row.id, descripcion: 'Aporte del 10% del bolsillo 3', saldoResultante: state.fund.saldo + row.aporteFondoComunitario, createdAt: row.createdAt });
-        saveLocalData(); return row;
-      }
-      if (method === 'GET' && route === '/costeo/lotes') return state.products;
-      if (method === 'POST' && route === '/costeo/lotes') {
-        if (!Array.isArray(body.insumos) || !body.insumos.length || !Number(body.porciones)) throw new Error('Agrega insumos y una cantidad válida de porciones.');
-        const insumosJson = body.insumos.map((item) => {
-          if (!item.nombre || Number(item.cantidadComprada) <= 0 || Number(item.cantidadUsada) <= 0 || Number(item.cantidadUsada) > Number(item.cantidadComprada)) throw new Error(`Revisa las cantidades de ${item.nombre || 'cada insumo'}.`);
-          return { ...item, costoProrrateado: Math.round(Number(item.precioPaquete) * Number(item.cantidadUsada) / Number(item.cantidadComprada)) };
-        });
-        const costoTotalLote = insumosJson.reduce((sum,item) => sum + item.costoProrrateado, 0);
-        const costoUnitarioPorcion = Math.round(costoTotalLote / Number(body.porciones));
-        const margenGanancia = Number(body.margenGanancia ?? .4);
-        const row = { id: id(), ...body, insumosJson, costoTotalLote, costoUnitarioPorcion, margenGanancia: margenGanancia.toFixed(4), precioSugeridoVenta: Math.ceil(costoUnitarioPorcion * (1 + margenGanancia) / 500) * 500, createdAt: new Date().toISOString() };
-        state.products.unshift(row); saveLocalData(); return row;
-      }
-      if (method === 'GET' && route === '/fiados') {
-        const pendingOnly = new URLSearchParams(query).get('pendientes') === 'true';
-        return state.debts.filter((debt) => !pendingOnly || debt.estado === 'PENDIENTE');
-      }
-      if (method === 'POST' && route === '/fiados') {
-        const phone = String(body.telefonoWhatsapp || '').replace(/\D/g,'');
-        if (phone.length < 10 || Number(body.montoFiado) <= 0) throw new Error('Verifica el teléfono y el monto del fiado.');
-        const row = { id: id(), ...body, telefonoWhatsapp: phone, fechaRegistro: dateOnly(new Date()), estado: 'PENDIENTE', comercianteId: body.comercianteId || 'unidad-parque-marruecos', datosPago: { nequi: '3005551122', daviplata: '3005553344' }, createdAt: new Date().toISOString() };
-        const message = `Hola ${row.cliente}, te recordamos que tienes un saldo pendiente de ${money(row.montoFiado)} COP. Puedes pagar por Nequi 3005551122 o Daviplata 3005553344. ¡Gracias!`;
-        row.enlaceWhatsapp = `https://wa.me/57${phone}?text=${encodeURIComponent(message)}`;
-        state.debts.unshift(row); saveLocalData(); return row;
-      }
-      const paidMatch = route.match(/^\/fiados\/([^/]+)\/pagado$/);
-      if (method === 'PATCH' && paidMatch) {
-        const debt = state.debts.find((item) => item.id === decodeURIComponent(paidMatch[1]));
-        if (!debt) throw new Error('No se encontró el fiado.');
-        debt.estado = 'PAGADO'; saveLocalData(); return debt;
-      }
-      if (method === 'GET' && route === '/red-solidaria/fondo') return state.fund;
-      if (method === 'POST' && route === '/red-solidaria/fondo/prestamos') {
-        const amount = Math.round(Number(body.monto));
-        if (amount <= 0 || amount > state.fund.saldo) throw new Error(`El fondo no cubre el préstamo. Saldo disponible: ${money(state.fund.saldo)}.`);
-        const row = { id: id(), tipoMovimiento: 'PRESTAMO', monto: amount, comercianteId: body.comercianteId, descripcion: body.motivo || 'Préstamo solidario sin intereses', saldoResultante: state.fund.saldo - amount, createdAt: new Date().toISOString() };
-        recordFund(row); saveLocalData(); return row;
-      }
-      if (method === 'GET' && route === '/red-solidaria/compras-colectivas') return state.purchases;
-      if (method === 'POST' && route === '/red-solidaria/compras-colectivas') {
-        const grouped = new Map();
-        for (const order of body.pedidos || []) {
-          const key = `${order.insumo.toLowerCase()}|${order.unidad}`;
-          const item = grouped.get(key) || { insumo: order.insumo, unidad: order.unidad, cantidad: 0, comerciantes: [], retail: 0 };
-          item.cantidad += Number(order.cantidad); item.comerciantes.push(order.comercianteId); item.retail += Number(order.precioReferenciaRetail || 0); grouped.set(key,item);
-        }
-        const consolidado = [...grouped.values()].map((item) => ({ ...item, costoDetal: item.retail, costoMayorista: Math.round(item.retail * .75), ahorro: Math.round(item.retail * .25) }));
-        const row = { id: id(), titulo: body.titulo, estado: 'CONSOLIDADA', pedidos: body.pedidos, consolidado: { lineas: consolidado, comerciantesUnicos: [...new Set((body.pedidos || []).map((item) => item.comercianteId))] }, ahorroEstimado: consolidado.reduce((sum,item) => sum + item.ahorro,0), createdAt: new Date().toISOString() };
-        state.purchases.unshift(row); saveLocalData(); return row;
-      }
-      if (method === 'GET' && route === '/red-solidaria/encuentros') return state.meetings;
-      if (method === 'POST' && route === '/red-solidaria/encuentros') {
-        const row = { id: id(), ...body, estado: 'PROGRAMADO', asistencia: [], createdAt: new Date().toISOString() };
-        state.meetings.unshift(row); saveLocalData(); return row;
-      }
-      if (method === 'GET' && route === '/conectividad/convocatorias') return [
-        { id: 'impulso-local', entidad: 'Impulso Local · Alcaldía Mayor de Bogotá', nombre: 'Fortalecimiento a unidades productivas locales', vigenciaHasta: '2026-12-15', enlacePostulacion: 'https://impulsolocal.bogota.gov.co/', beneficio: 'Capital semilla, formación y acompañamiento comercial.' },
-        { id: 'ipes', entidad: 'IPES · Instituto para la Economía Social', nombre: 'Rutas de fortalecimiento del comercio popular', vigenciaHasta: '2026-11-30', enlacePostulacion: 'https://www.ipes.gov.co/', beneficio: 'Asistencia técnica, ferias y articulación comercial.' },
-        { id: 'alcaldia-local', entidad: 'Alcaldía Local Rafael Uribe Uribe', nombre: 'Desarrollo económico comunitario', vigenciaHasta: '2026-10-31', enlacePostulacion: 'https://www.gobiernobogota.gov.co/localidades/rafael-uribe-uribe', beneficio: 'Apoyos locales y redes de comercialización barrial.' },
-      ];
-      throw new Error(`La operación ${method} ${route} no está disponible en modo local.`);
-    }
-    const post = (path, body) => request(path, { method: 'POST', body: JSON.stringify(body) });
-    function notify(message) { const node = $('#toast'); node.textContent = message; node.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => node.classList.remove('show'), 3200); }
-    function status(id, message, error = false) { const node = document.getElementById(id); if (node) { node.textContent = message; node.style.color = error ? '#bd4141' : '#0b9268'; } }
-    function showPage(page) {
-      $$('.page').forEach((node) => node.classList.toggle('active', node.id === `page-${page}`));
-      $$('.nav-link').forEach((node) => node.classList.toggle('active', node.dataset.page === page));
-      $('#sidebar').classList.remove('open');
-      if (page === 'reportes') loadReports();
-      if (page === 'inicio') refreshDashboard();
+
+    // Navegación de pestañas
+    function switchTab(targetId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) targetPane.classList.add('active');
+
+      const targetBtn = document.querySelector(`.nav-btn[data-tab="${targetId}"]`);
+      if (targetBtn) targetBtn.classList.add('active');
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    function localDate(value) {
-      if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        const [year, month, day] = value.split('-').map(Number);
-        return new Date(year, month - 1, day);
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // Verificación de Backend vs Standalone
+    async function checkBackendConnection() {
+      const badge = document.getElementById('connectionModeBadge');
+      const dot = document.getElementById('connectionDot');
+      const text = document.getElementById('connectionText');
+
+      try {
+        const res = await fetch('/api/salud', { method: 'GET', cache: 'no-cache' });
+        if (res.ok) {
+          isBackendOnline = true;
+          badge.className = 'mode-pill online';
+          dot.textContent = '🟢';
+          text.textContent = 'Sincronizado con Backend NestJS';
+          badge.title = 'Conectado a la API. Los datos se guardan en base de datos PostgreSQL.';
+          return true;
+        }
+      } catch (e) {
+        // Fallback offline
       }
-      return new Date(value);
+
+      isBackendOnline = false;
+      badge.className = 'mode-pill offline';
+      dot.textContent = '🔵';
+      text.textContent = 'Modo Standalone (Modelos Locales Activos)';
+      badge.title = 'Ejecutando en modo autónomo con modelos empaquetados en /public/models/models.js. Funcionalidad 100% activa.';
+      return false;
     }
-    function isoDate(value) { return value ? localDate(value).toLocaleDateString('es-CO') : '—'; }
-    function renderRecent() {
-      const rows = [
-        ...state.products.slice(0, 4).map((item) => ({ date: item.createdAt, name: item.nombre, value: item.costoTotalLote, label: 'Lote costeado', className: '' })),
-        ...state.closings.slice(0, 4).map((item) => ({ date: item.fechaCierre, name: 'Cierre de caja', value: item.ventaTotalDia, label: 'Distribuido', className: 'positive' })),
-      ].sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0)).slice(0,6);
-      $('#recentRows').innerHTML = rows.length ? rows.map((row) => `<tr><td>${isoDate(row.date)}</td><td><strong>${safe(row.name)}</strong></td><td>${money(row.value)}</td><td class="${row.className}">${row.label}</td></tr>`).join('') : '<tr><td colspan="4" class="empty">Aún no hay actividad. Registra tu primer lote o cierre.</td></tr>';
+
+    // Alternar manual de modo
+    document.getElementById('connectionModeBadge').addEventListener('click', async () => {
+      const nowOnline = await checkBackendConnection();
+      showToast(nowOnline ? 'Conexión verificada: Backend activo' : 'Modo Standalone confirmado: Modelos empaquetados cargados');
+    });
+
+    // Render Dashboard
+    function renderDashboard() {
+      if (!store) return;
+      const cierres = store.get('cierres');
+      const productos = store.get('productos');
+      const fiados = store.get('fiados');
+      const compras = store.get('comprasColectivas');
+      const fondo = store.getFondo();
+
+      // Métricas
+      const ultCierre = cierres[0];
+      if (ultCierre) {
+        document.getElementById('dashMetricVenta').textContent = formatMoney(ultCierre.ventaTotalDia);
+      }
+
+      let ahorroTotal = compras.reduce((sum, c) => sum + (Number(c.ahorroTotalGrupo) || 0), 0);
+      document.getElementById('dashMetricAhorro').textContent = formatMoney(ahorroTotal);
+
+      document.getElementById('dashMetricFondo').textContent = formatMoney(fondo.saldoTotal);
+      document.getElementById('fondoSaldoBadge').textContent = 'Saldo Común: ' + formatMoney(fondo.saldoTotal);
+
+      const fiadosPendientes = fiados.filter(f => f.estado === 'PENDIENTE');
+      const totalPendiente = fiadosPendientes.reduce((sum, f) => sum + (Number(f.montoFiado) || 0), 0);
+      document.getElementById('dashMetricFiados').textContent = formatMoney(totalPendiente);
+      document.getElementById('dashMetricFiadosCount').textContent = `${fiadosPendientes.length} cuentas con cobro activo`;
+      document.getElementById('fiadosTotalBadge').textContent = 'Por Cobrar: ' + formatMoney(totalPendiente);
+
+      // Listado Compras
+      const purchasesContainer = document.getElementById('dashPurchasesList');
+      purchasesContainer.innerHTML = compras.map(c => `
+        <div style="border-bottom: 1px solid var(--surface-border); padding: 10px 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 13px;">${c.titulo}</strong>
+            <span class="badge ${c.estado === 'CONSOLIDADO' ? 'badge-success' : 'badge-warning'}">${c.estado}</span>
+          </div>
+          <div style="font-size: 12px; color: var(--ink-muted); margin: 4px 0;">
+            Proveedor: ${c.distribuidorMayorista} • Ahorro del grupo: <strong style="color: #059669;">${formatMoney(c.ahorroTotalGrupo)} (${c.porcentajeAhorroPromedio}%)</strong>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: ${c.estado === 'CONSOLIDADO' ? '100%' : '65%'}"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // Movimientos Fondo
+      const fundContainer = document.getElementById('dashFundMovements');
+      fundContainer.innerHTML = (fondo.movimientos || []).slice(0, 3).map(m => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--surface-border); font-size: 12.5px;">
+          <div>
+            <strong>${m.comercianteNombre}</strong>
+            <div style="font-size: 11px; color: var(--ink-muted);">${m.concepto}</div>
+          </div>
+          <span style="font-weight: 700; color: ${m.tipoMovimiento.includes('PRESTAMO') ? '#e11d48' : '#059669'};">
+            ${m.tipoMovimiento.includes('PRESTAMO') ? '-' : '+'}${formatMoney(m.monto)}
+          </span>
+        </div>
+      `).join('');
     }
-    function renderChart() {
-      const container = $('#weekChart');
-      const last = state.closings.slice(0, 7).reverse();
-      const rows = last.length ? last : Array(7).fill(null);
-      const max = Math.max(...last.map((item) => Number(item.ventaTotalDia) || 0), 1);
-      container.innerHTML = rows.map((item,index) => {
-        const sales = Number(item?.ventaTotalDia) || 0;
-        const supplies = Number(item?.bolsilloReinversion) || 0;
-        const home = Number(item?.bolsilloSustento) || 0;
-        const height = (value) => Math.max(value ? 5 : 3, value / max * 88);
-        const label = item ? localDate(item.fechaCierre).toLocaleDateString('es-CO', { weekday: 'short' }).slice(0,2) : ['L','M','X','J','V','S','D'][index];
-        return `<div class="chart-group" data-label="${label}"><i class="bar" style="--h:${height(sales)}%"></i><i class="bar cost" style="--h:${height(supplies)}%"></i><i class="bar profit" style="--h:${height(home)}%"></i></div>`;
-      }).join('');
+
+    // Costeo & Lotes
+    function addInsumoRow(nombre = '', comprada = '', precio = '', usada = '') {
+      const container = document.getElementById('insumosContainer');
+      const row = document.createElement('div');
+      row.className = 'grid-2 insumo-item-row';
+      row.style.marginBottom = '8px';
+      row.innerHTML = `
+        <input type="text" class="form-control insumo-nombre" placeholder="Nombre (Ej. Harina)" value="${nombre}" required>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 6px;">
+          <input type="number" class="form-control insumo-comprada" placeholder="Total comp." value="${comprada}" title="Cantidad total comprada (g o und)" required>
+          <input type="number" class="form-control insumo-precio" placeholder="Precio COP" value="${precio}" title="Precio total del paquete" required>
+          <input type="number" class="form-control insumo-usada" placeholder="Usada" value="${usada}" title="Cantidad usada en este lote" required>
+          <button type="button" class="btn btn-secondary btn-sm btn-del-insumo" title="Quitar insumo">✕</button>
+        </div>
+      `;
+
+      row.querySelector('.btn-del-insumo').addEventListener('click', () => {
+        if (container.querySelectorAll('.insumo-item-row').length > 1) {
+          row.remove();
+          recalcCosteoForm();
+        } else {
+          row.querySelectorAll('input').forEach(i => i.value = '');
+          recalcCosteoForm();
+        }
+      });
+
+      row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalcCosteoForm));
+      container.appendChild(row);
+      recalcCosteoForm();
     }
-    async function refreshDashboard() {
-      const results = await Promise.allSettled([request('/bolsillos/historial'), request('/costeo/lotes')]);
-      state.closings = results[0].status === 'fulfilled' ? results[0].value || [] : [];
-      state.products = results[1].status === 'fulfilled' ? results[1].value || [] : [];
-      const latest = state.closings.slice().sort((a,b) => new Date(b.fechaCierre) - new Date(a.fechaCierre))[0];
-      $('#stat-sales').textContent = money(latest?.ventaTotalDia);
-      $('#stat-supplies').textContent = money(latest?.bolsilloReinversion);
-      $('#stat-home').textContent = money(latest?.bolsilloSustento);
-      $('#stat-savings').textContent = money(latest?.bolsilloReserva);
-      $('#salesDate').textContent = latest ? `Cierre del ${isoDate(latest.fechaCierre)}` : 'Registra tu primer cierre';
-      renderRecent(); renderChart();
+
+    function recalcCosteoForm() {
+      const rows = document.querySelectorAll('.insumo-item-row');
+      const insumos = [];
+      rows.forEach(r => {
+        insumos.push({
+          nombre: r.querySelector('.insumo-nombre').value,
+          cantidadComprada: Number(r.querySelector('.insumo-comprada').value) || 0,
+          precioPaquete: Number(r.querySelector('.insumo-precio').value) || 0,
+          cantidadUsada: Number(r.querySelector('.insumo-usada').value) || 0
+        });
+      });
+
+      const porciones = Number(document.getElementById('costeoPorciones').value) || 12;
+      const margen = (Number(document.getElementById('costeoMargen').value) || 40) / 100;
+
+      if (calc) {
+        const res = calc.costeoLote(insumos, porciones, margen);
+        document.getElementById('calcCostoTotal').textContent = formatMoney(res.costoTotal);
+        document.getElementById('calcCostoUnitario').textContent = formatMoney(res.costoUnitario);
+        document.getElementById('calcPrecioSugerido').textContent = formatMoney(res.precioSugerido);
+      }
     }
-    async function loadClosings() {
-      try { state.closings = await request('/bolsillos/historial') || []; } catch (error) { state.closings = []; $('#closingRows').innerHTML = `<tr><td colspan="5" class="empty">${safe(error.message)}. Verifica que el API esté activo.</td></tr>`; renderRecent(); return; }
-      const rows = state.closings.slice().sort((a,b) => new Date(b.fechaCierre) - new Date(a.fechaCierre));
-      $('#closingRows').innerHTML = rows.length ? rows.map((item) => `<tr><td>${isoDate(item.fechaCierre)}</td><td><strong>${money(item.ventaTotalDia)}</strong></td><td>${money(item.bolsilloReinversion)}</td><td>${money(item.bolsilloSustento)}</td><td>${money(item.bolsilloReserva)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">No hay cierres registrados.</td></tr>';
-      renderRecent(); renderChart(); updateReports();
+
+    document.getElementById('btnAddInsumo').addEventListener('click', () => addInsumoRow());
+    document.getElementById('costeoPorciones').addEventListener('input', recalcCosteoForm);
+    document.getElementById('costeoMargen').addEventListener('input', recalcCosteoForm);
+
+    document.getElementById('formCosteo').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('costeoNombre').value.trim();
+      const porciones = Number(document.getElementById('costeoPorciones').value);
+      const margen = Number(document.getElementById('costeoMargen').value) / 100;
+
+      const rows = document.querySelectorAll('.insumo-item-row');
+      const insumos = [];
+      rows.forEach(r => {
+        insumos.push({
+          nombre: r.querySelector('.insumo-nombre').value,
+          cantidadComprada: Number(r.querySelector('.insumo-comprada').value),
+          precioPaquete: Number(r.querySelector('.insumo-precio').value),
+          cantidadUsada: Number(r.querySelector('.insumo-usada').value)
+        });
+      });
+
+      const res = calc.costeoLote(insumos, porciones, margen);
+      const nuevoProducto = {
+        nombre,
+        porciones,
+        margenGanancia: margen,
+        costoTotalLote: res.costoTotal,
+        costoUnitarioPorcion: res.costoUnitario,
+        precioSugeridoVenta: res.precioSugerido,
+        insumos,
+        comercianteId: 'hermanas-cheesecake-marruecos',
+        comercianteNombre: 'Dulces Hermanas Marruecos'
+      };
+
+      if (isBackendOnline) {
+        try {
+          await fetch('/api/costeo/lotes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoProducto)
+          });
+        } catch (err) {
+          console.warn('Backend sync failed, saving locally:', err);
+        }
+      }
+
+      store.insert('productos', nuevoProducto);
+      showToast('Lote de producción guardado con éxito.');
+      renderProductosTable();
+      renderDashboard();
+    });
+
+    function renderProductosTable() {
+      const productos = store.get('productos');
+      const tbody = document.getElementById('tablaProductosBody');
+      tbody.innerHTML = productos.map(p => `
+        <tr>
+          <td><strong>${p.nombre}</strong></td>
+          <td>${p.porciones} und</td>
+          <td>${formatMoney(p.costoTotalLote)}</td>
+          <td>${formatMoney(p.costoUnitarioPorcion)}</td>
+          <td><span class="badge badge-success">${formatMoney(p.precioSugeridoVenta)}</span></td>
+        </tr>
+      `).join('');
     }
-    function addIngredient(item = {}) {
-      const row = document.createElement('div'); row.className = 'ingredient-row';
-      row.innerHTML = `<input aria-label="Nombre del insumo" placeholder="Harina" value="${safe(item.nombre || '')}" required><input aria-label="Cantidad comprada" type="number" min="0.0001" step="any" placeholder="1000" value="${safe(item.cantidadComprada || '')}" required><input aria-label="Precio del paquete COP" type="number" min="0" step="1" placeholder="12000" value="${safe(item.precioPaquete || '')}" required><input aria-label="Cantidad usada" type="number" min="0.0001" step="any" placeholder="250" value="${safe(item.cantidadUsada || '')}" required><button type="button" class="icon-button" title="Quitar insumo" aria-label="Quitar insumo">×</button>`;
-      row.querySelector('button').addEventListener('click', () => { if ($$('.ingredient-row', $('#ingredientList')).length > 1) row.remove(); else row.querySelectorAll('input').forEach((input) => input.value = ''); calculateCost(); });
-      row.querySelectorAll('input').forEach((input) => input.addEventListener('input', calculateCost));
-      $('#ingredientList').append(row); calculateCost();
+
+    // Módulo de Bolsillos
+    function recalcBolsillosPreview() {
+      const venta = Number(document.getElementById('cierreVentaTotal').value) || 0;
+      if (calc) {
+        const b = calc.bolsillos(venta);
+        document.getElementById('prevPocket60').textContent = formatMoney(b.reinversion);
+        document.getElementById('prevPocket30').textContent = formatMoney(b.sustento);
+        document.getElementById('prevPocket10').textContent = formatMoney(b.reservaTotal);
+        document.getElementById('prevAhorroPers').textContent = formatMoney(b.ahorroPersonal) + ' COP';
+        document.getElementById('prevAporteMutual').textContent = formatMoney(b.aporteFondo) + ' COP';
+      }
     }
-    function costSnapshot() {
-      return $$('.ingredient-row', $('#ingredientList')).map((row) => { const inputs = $$('input', row); return { nombre: inputs[0].value.trim(), cantidadComprada: Number(inputs[1].value), precioPaquete: Number(inputs[2].value), cantidadUsada: Number(inputs[3].value) }; });
+
+    document.getElementById('cierreVentaTotal').addEventListener('input', recalcBolsillosPreview);
+
+    document.getElementById('formCierre').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fecha = document.getElementById('cierreFecha').value;
+      const venta = Number(document.getElementById('cierreVentaTotal').value);
+      const b = calc.bolsillos(venta);
+
+      const nuevoCierre = {
+        fechaCierre: fecha,
+        ventaTotalDia: venta,
+        bolsilloReinversion: b.reinversion,
+        bolsilloSustento: b.sustento,
+        bolsilloReserva: b.reservaTotal,
+        aporteFondoComunitario: b.aporteFondo,
+        ahorroPersonal: b.ahorroPersonal,
+        comercianteId: 'hermanas-cheesecake-marruecos'
+      };
+
+      if (isBackendOnline) {
+        try {
+          await fetch('/api/bolsillos/cierre-diario', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoCierre)
+          });
+        } catch (err) {
+          console.warn('Backend sync failed, saving locally:', err);
+        }
+      }
+
+      store.insert('cierres', nuevoCierre);
+      store.addFondoAporte(b.aporteFondo, 'Dulces Hermanas Marruecos', `Aporte diario por cierre de ventas del ${fecha}`);
+
+      showToast(`Cierre guardado: $${b.reinversion.toLocaleString()} a insumos, $${b.sustento.toLocaleString()} al hogar, $${b.aporteFondo.toLocaleString()} al Banco Comunitario`);
+      renderCierresTable();
+      renderFondoTable();
+      renderDashboard();
+    });
+
+    function renderCierresTable() {
+      const cierres = store.get('cierres');
+      const tbody = document.getElementById('tablaCierresBody');
+      tbody.innerHTML = cierres.map(c => `
+        <tr>
+          <td>${c.fechaCierre}</td>
+          <td><strong>${formatMoney(c.ventaTotalDia)}</strong></td>
+          <td>${formatMoney(c.bolsilloReinversion)}</td>
+          <td>${formatMoney(c.bolsilloSustento)}</td>
+          <td>${formatMoney(c.bolsilloReserva)}</td>
+          <td><span class="badge badge-success">+${formatMoney(c.aporteFondoComunitario)}</span></td>
+        </tr>
+      `).join('');
     }
-    function calculateCost() {
-      const rows = costSnapshot();
-      const total = rows.reduce((sum,item) => sum + (item.cantidadComprada > 0 ? item.precioPaquete * item.cantidadUsada / item.cantidadComprada : 0), 0);
-      const portions = Number($('#portionCount').value) || 0;
-      const unit = portions ? total / portions : 0;
-      const margin = (Number($('#margin').value) || 0) / 100;
-      $('#costTotal').textContent = money(total); $('#unitCost').textContent = money(unit);
-      $('#suggestedPrice').textContent = money(Math.ceil((unit * (1 + margin)) / 500) * 500);
+
+    // Módulo Fiados
+    document.getElementById('formFiado').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cliente = document.getElementById('fiadoCliente').value.trim();
+      const telefono = document.getElementById('fiadoTelefono').value.replace(/\D/g, '');
+      const monto = Number(document.getElementById('fiadoMonto').value);
+      const concepto = document.getElementById('fiadoConcepto').value.trim();
+      const fechaLimite = document.getElementById('fiadoFechaLimite').value;
+
+      const mensaje = `Hola ${cliente}, un saludo desde el Parque Marruecos. Te recordamos amigablemente tu cuenta pendiente por ${formatMoney(monto)} COP con fecha límite el ${fechaLimite}. Puedes pagarnos por Nequi/Daviplata o en el puesto. ¡Muchas gracias por apoyar la economía popular!`;
+      const enlaceWhatsapp = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+
+      const nuevoFiado = {
+        cliente,
+        telefonoWhatsapp: telefono,
+        montoFiado: monto,
+        concepto,
+        fechaRegistro: new Date().toISOString().split('T')[0],
+        fechaLimitePago: fechaLimite,
+        estado: 'PENDIENTE',
+        enlaceWhatsapp
+      };
+
+      if (isBackendOnline) {
+        try {
+          await fetch('/api/fiados', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoFiado)
+          });
+        } catch (err) {
+          console.warn('Backend sync failed, saving locally:', err);
+        }
+      }
+
+      store.insert('fiados', nuevoFiado);
+      showToast('Fiado registrado correctamente.');
+      document.getElementById('formFiado').reset();
+      setDefaultDates();
+      renderFiadosTable();
+      renderDashboard();
+
+      if (confirm(`¿Deseas abrir WhatsApp para enviar el recordatorio amigable a ${cliente}?`)) {
+        window.open(enlaceWhatsapp, '_blank');
+      }
+    });
+
+    function renderFiadosTable() {
+      const fiados = store.get('fiados');
+      const tbody = document.getElementById('tablaFiadosBody');
+      tbody.innerHTML = fiados.map(f => `
+        <tr>
+          <td>
+            <strong>${f.cliente}</strong>
+            <div style="font-size: 11px; color: var(--ink-muted);">${f.concepto || 'Venta a crédito'}</div>
+          </td>
+          <td><strong>${formatMoney(f.montoFiado)}</strong></td>
+          <td>${f.fechaLimitePago}</td>
+          <td>
+            <span class="badge ${f.estado === 'PAGADO' ? 'badge-success' : 'badge-warning'}">${f.estado}</span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 6px;">
+              ${f.enlaceWhatsapp ? `<a href="${f.enlaceWhatsapp}" target="_blank" class="btn btn-secondary btn-sm" title="Enviar WhatsApp">💬 WhatsApp</a>` : ''}
+              ${f.estado !== 'PAGADO' ? `<button class="btn btn-primary btn-sm btn-mark-paid" data-id="${f.id}">✓ Pagado</button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      tbody.querySelectorAll('.btn-mark-paid').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          store.update('fiados', id, { estado: 'PAGADO' });
+          showToast('Fiado marcado como PAGADO.');
+          renderFiadosTable();
+          renderDashboard();
+        });
+      });
     }
-    async function loadProducts() {
-      status('costStatus', 'Consultando lotes...');
-      try { state.products = await request('/costeo/lotes') || []; const products = state.products; $('#productList').innerHTML = products.length ? products.slice(0,8).map((p) => `<div class="list-row"><div><strong>${safe(p.nombre)}</strong><small>${p.porciones} porciones · Costo ${money(p.costoTotalLote)}</small></div><span class="pill">${money(p.precioSugeridoVenta)}</span></div>`).join('') : '<div class="empty">No hay lotes guardados.</div>'; status('costStatus', `${products.length} lotes cargados`); updateReports(); } catch (error) { status('costStatus', error.message, true); }
+
+    // Compras Colectivas
+    function renderComprasColectivas() {
+      const compras = store.get('comprasColectivas');
+      const container = document.getElementById('comprasColectivasList');
+      container.innerHTML = compras.map(c => `
+        <div class="card" style="margin-bottom: 16px; border-left: 4px solid #10b981;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+              <strong style="font-size: 15px; color: #064e43;">${c.titulo}</strong>
+              <div style="font-size: 12px; color: var(--ink-muted); margin-top: 2px;">
+                Distribuidor: <strong>${c.distribuidorMayorista}</strong> • Cierre: <strong>${c.fechaCierrePedido}</strong>
+              </div>
+            </div>
+            <span class="badge ${c.estado === 'CONSOLIDADO' ? 'badge-success' : 'badge-warning'}">${c.estado}</span>
+          </div>
+
+          <div style="margin: 14px 0 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600;">
+              <span>Pedidos de Asociados:</span>
+              <span style="color: #059669;">Ahorro del Grupo: ${formatMoney(c.ahorroTotalGrupo)} (${c.porcentajeAhorroPromedio}%)</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: ${c.estado === 'CONSOLIDADO' ? '100%' : '65%'}"></div>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border-radius: var(--radius-sm); padding: 10px; font-size: 12px;">
+            ${(c.pedidos || []).map(p => `
+              <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0;">
+                <span><strong>${p.comercianteNombre}:</strong> ${p.insumo} (${p.cantidad} ${p.unidad})</span>
+                <span style="color: #059669; font-weight: 600;">Ahorro: ${formatMoney(p.ahorroIndividual)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
     }
-    function previewPockets() { const value = Number($('#dailySales').value) || 0; $('#pocketSupply').textContent = money(Math.round(value * .6)); $('#pocketHome').textContent = money(Math.round(value * .3)); $('#pocketReserve').textContent = money(value - Math.round(value * .6) - Math.round(value * .3)); }
-    async function loadDebts() {
-      $('#debtRows').innerHTML = '<div class="loading">Cargando deudas...</div>';
-      try { state.debts = await request(`/fiados?pendientes=${$('#debtFilter').value}`) || []; }
-      catch (error) { $('#debtRows').innerHTML = `<div class="empty">${safe(error.message)}. Verifica que el API esté activo.</div>`; state.debts = []; return; }
-      $('#debtRows').innerHTML = state.debts.length ? state.debts.map((debt) => `<div class="list-row"><div><strong>${safe(debt.cliente)}</strong><small>${money(debt.montoFiado)} · vence ${isoDate(debt.fechaLimitePago)}</small><small><span class="pill ${debt.estado === 'PAGADO' ? 'paid' : 'pending'}">${safe(debt.estado)}</span></small></div><div style="display:grid;gap:5px">${debt.enlaceWhatsapp ? `<a class="button small" href="${safe(debt.enlaceWhatsapp)}" target="_blank" rel="noreferrer">WhatsApp</a>` : ''}${debt.estado !== 'PAGADO' ? `<button class="button secondary small" data-paid="${safe(debt.id)}">Marcar pagado</button>` : ''}</div></div>`).join('') : '<div class="empty">No hay cuentas en este filtro.</div>';
-      $$('[data-paid]', $('#debtRows')).forEach((button) => button.addEventListener('click', async () => { button.disabled = true; try { await request(`/fiados/${encodeURIComponent(button.dataset.paid)}/pagado`, { method: 'PATCH' }); notify('Fiado actualizado como pagado.'); await loadDebts(); } catch (error) { button.disabled = false; notify(error.message); } }));
-      updateReports();
+
+    document.getElementById('formPedidoColectivo').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const campanaId = document.getElementById('pedidoCampana').value;
+      const comerciante = document.getElementById('pedidoComerciante').value.trim();
+      const insumo = document.getElementById('pedidoInsumo').value.trim();
+      const cantidad = document.getElementById('pedidoCantidad').value.trim();
+      const precioRetail = Number(document.getElementById('pedidoPrecioRetail').value);
+      const precioMayorista = Number(document.getElementById('pedidoPrecioMayorista').value);
+      const ahorro = Math.max(0, precioRetail - precioMayorista);
+
+      const compras = store.get('comprasColectivas');
+      const campana = compras.find(c => c.id === campanaId);
+      if (campana) {
+        if (!campana.pedidos) campana.pedidos = [];
+        campana.pedidos.push({
+          comercianteId: 'asoc-' + Date.now(),
+          comercianteNombre: comerciante,
+          insumo,
+          cantidad,
+          unidad: 'und',
+          precioRetail,
+          precioMayorista,
+          ahorroIndividual: ahorro
+        });
+        campana.ahorroTotalGrupo = (Number(campana.ahorroTotalGrupo) || 0) + ahorro;
+        store.save();
+        showToast('Pedido agregado a la campaña colectiva. ¡Ahorro sumado!');
+        renderComprasColectivas();
+        renderDashboard();
+      }
+    });
+
+    // Fondo Comunitario (Anti Gota a Gota)
+    document.getElementById('formPrestamoMutual').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const comerciante = document.getElementById('prestamoComerciante').value.trim();
+      const monto = Number(document.getElementById('prestamoMonto').value);
+      const plazo = Number(document.getElementById('prestamoPlazo').value);
+      const motivo = document.getElementById('prestamoMotivo').value.trim();
+
+      try {
+        store.solicitarPrestamoSolidario(monto, comerciante, motivo, plazo);
+        showToast(`Préstamo solidario de ${formatMoney(monto)} aprobado a 0% de interés de usura.`);
+        document.getElementById('formPrestamoMutual').reset();
+        document.getElementById('prestamoComerciante').value = 'Dulces Hermanas Marruecos';
+        renderFondoTable();
+        renderDashboard();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    function renderFondoTable() {
+      const fondo = store.getFondo();
+      const tbody = document.getElementById('tablaFondoBody');
+      tbody.innerHTML = (fondo.movimientos || []).map(m => `
+        <tr>
+          <td>${m.fecha}</td>
+          <td><span class="badge ${m.tipoMovimiento.includes('PRESTAMO') ? 'badge-danger' : 'badge-success'}">${m.tipoMovimiento}</span></td>
+          <td><strong>${m.comercianteNombre}</strong></td>
+          <td style="color: ${m.tipoMovimiento.includes('PRESTAMO') ? '#e11d48' : '#059669'}; font-weight: 700;">
+            ${m.tipoMovimiento.includes('PRESTAMO') ? '-' : '+'}${formatMoney(m.monto)}
+          </td>
+          <td><div style="font-size: 11px; max-width: 320px;">${m.concepto}</div></td>
+        </tr>
+      `).join('');
     }
-    async function loadFund() {
-      try { state.fund = await request('/red-solidaria/fondo'); const movements = state.fund.movimientos || []; $('#fundBalance').textContent = money(state.fund.saldo); $('#fundRows').innerHTML = movements.length ? movements.map((m) => `<tr><td>${isoDate(m.createdAt)}</td><td>${safe(m.tipoMovimiento)}</td><td>${safe(m.comercianteId || 'Comunidad')}</td><td>${money(m.monto)}</td><td>${money(m.saldoResultante)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Aún no hay movimientos.</td></tr>'; updateReports(); }
-      catch (error) { $('#fundRows').innerHTML = `<tr><td colspan="5" class="empty">${safe(error.message)}</td></tr>`; }
+
+    // Convocatorias
+    function renderConvocatorias() {
+      const convs = store.get('convocatorias');
+      const container = document.getElementById('convocatoriasContainer');
+      container.innerHTML = convs.map(c => `
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #10b981; text-transform: uppercase;">${c.entidad}</div>
+            <h3 style="font-family: var(--font-heading); font-size: 16px; font-weight: 700; margin: 4px 0 8px;">${c.nombre}</h3>
+            <p style="font-size: 12.5px; color: var(--ink-muted); margin-bottom: 12px;">${c.beneficio}</p>
+            
+            <div style="background: #f8fafc; border-radius: var(--radius-sm); padding: 10px; font-size: 11.5px; margin-bottom: 14px;">
+              <strong>Requisitos clave:</strong>
+              <ul style="padding-left: 14px; margin-top: 4px; color: #475569;">
+                ${(c.requisitos || []).map(r => `<li>${r}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--surface-border); padding-top: 12px;">
+            <div style="font-size: 11px; color: var(--ink-muted);">Vence: <strong>${c.vigenciaHasta}</strong></div>
+            <a href="${c.enlacePostulacion}" target="_blank" class="btn btn-primary btn-sm">Postularme ↗</a>
+          </div>
+        </div>
+      `).join('');
     }
-    async function loadPurchases() {
-      try { state.purchases = await request('/red-solidaria/compras-colectivas') || []; $('#purchaseRows').innerHTML = state.purchases.length ? state.purchases.map((p) => `<div class="list-row"><div><strong>${safe(p.titulo)}</strong><small>${safe(p.estado)} · Ahorro estimado ${money(p.ahorroEstimado)}</small></div><span class="pill">${(p.pedidos || []).length} pedidos</span></div>`).join('') : '<div class="empty">Aún no hay compras colectivas.</div>'; }
-      catch (error) { $('#purchaseRows').innerHTML = `<div class="empty">${safe(error.message)}</div>`; }
+
+    // Inicialización de Fechas por Defecto
+    function setDefaultDates() {
+      const today = new Date().toISOString().split('T')[0];
+      const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+      if (document.getElementById('cierreFecha')) {
+        document.getElementById('cierreFecha').value = today;
+      }
+      if (document.getElementById('fiadoFechaLimite')) {
+        document.getElementById('fiadoFechaLimite').value = nextWeek;
+      }
     }
-    async function loadMeetings() {
-      try { state.meetings = await request('/red-solidaria/encuentros') || []; $('#meetingRows').innerHTML = state.meetings.length ? state.meetings.map((meeting) => `<div class="list-row"><div><strong>${safe(meeting.titulo)}</strong><small>${new Date(meeting.fechaHora).toLocaleString('es-CO')} · ${safe(meeting.lugar)}</small><small>${(meeting.asistencia || []).length} asistentes / ${meeting.cupo} cupos</small></div><span class="pill">${safe(meeting.estado)}</span></div>`).join('') : '<div class="empty">No hay encuentros programados.</div>'; }
-      catch (error) { $('#meetingRows').innerHTML = `<div class="empty">${safe(error.message)}</div>`; }
-    }
-    async function loadCalls() {
-      $('#callRows').innerHTML = '<div class="loading">Consultando oportunidades...</div>';
-      try { state.calls = await request('/conectividad/convocatorias') || []; $('#callRows').innerHTML = state.calls.length ? state.calls.map((call) => `<article class="card card-pad"><div class="list-row" style="border:0;padding:0"><div class="list-main"><span class="conv-icon">✦</span><span><strong>${safe(call.nombre)}</strong><small>${safe(call.entidad)} · Vigencia hasta ${isoDate(call.vigenciaHasta)}</small></span></div><a class="button small" href="${safe(call.enlacePostulacion)}" target="_blank" rel="noreferrer">Ver convocatoria ↗</a></div><p class="subheading">${safe(call.beneficio || '')}</p>${call.requisitos?.length ? `<small style="color:var(--muted)">Requisitos: ${call.requisitos.map(safe).join(' · ')}</small>` : ''}</article>`).join('') : '<div class="empty">No se encontraron convocatorias vigentes.</div>'; }
-      catch (error) { $('#callRows').innerHTML = `<div class="card empty">${safe(error.message)}. Verifica que el API esté activo.</div>`; }
-    }
-    function updateReports() {
-      const sales = state.closings.reduce((sum,item) => sum + (Number(item.ventaTotalDia) || 0), 0);
-      const unpaid = state.debts.filter((item) => item.estado !== 'PAGADO');
-      $('#reportSales').textContent = money(sales); $('#reportProducts').textContent = String(state.products.length);
-      $('#reportDebts').textContent = money(unpaid.reduce((sum,item) => sum + Number(item.montoFiado || 0),0)); $('#reportDebtCount').textContent = `${unpaid.length} cuentas pendientes`;
-      $('#reportFund').textContent = money(state.fund?.saldo); $('#reportSupply').textContent = money(Math.round(sales * .6)); $('#reportHome').textContent = money(Math.round(sales * .3)); $('#reportReserve').textContent = money(sales - Math.round(sales * .6) - Math.round(sales * .3));
-    }
-    async function loadReports() { await Promise.allSettled([loadClosings(), loadProducts(), loadDebts(), loadFund()]); updateReports(); }
-    function addOrder(item = {}) {
-      const row = document.createElement('div'); row.className = 'ingredient-row order-row';
-      row.innerHTML = `<input aria-label="Nombre del insumo" placeholder="Queso crema" value="${safe(item.insumo || '')}" required><input aria-label="Cantidad" type="number" min="0.0001" step="any" placeholder="2000" value="${safe(item.cantidad || '')}" required><input aria-label="Precio de referencia COP" type="number" min="0" step="1" placeholder="24000" value="${safe(item.precioReferenciaRetail || '')}"><input aria-label="Unidad" placeholder="g" value="${safe(item.unidad || '')}" required><button type="button" class="icon-button" title="Quitar pedido" aria-label="Quitar pedido">×</button>`;
-      row.querySelector('button').addEventListener('click', () => { if ($$('.order-row', $('#orderList')).length > 1) row.remove(); else row.querySelectorAll('input').forEach((input) => input.value = ''); }); $('#orderList').append(row);
-    }
-    function setup() {
-      $('#todayLabel').textContent = today.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
-      $('#closingDate').value = dateOnly(today); $('#debtDue').value = dateOnly(new Date(today.getFullYear(),today.getMonth(),today.getDate()+7));
-      $('#meetingDate').value = `${dateOnly(new Date(today.getFullYear(),today.getMonth(),today.getDate()+7))}T15:00`;
-      const profile = JSON.parse(localStorage.getItem('mipyme-profile') || '{}'); $('#profileName').value = profile.name || 'María González'; $('#profileBusiness').value = profile.business || 'MiPyme Marruecos'; applyProfile(profile.name || 'María González');
-      $$('.nav-link').forEach((button) => button.addEventListener('click', () => showPage(button.dataset.page)));
-      $$('[data-go]').forEach((button) => button.addEventListener('click', () => showPage(button.dataset.go)));
-      $('#menuToggle').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
-      $('#refreshButton').addEventListener('click', refreshDashboard);
-      $('#addIngredient').addEventListener('click', () => addIngredient()); addIngredient({ nombre: 'Queso crema', cantidadComprada: 1000, precioPaquete: 24000, cantidadUsada: 500 }); addIngredient({ nombre: 'Galletas', cantidadComprada: 400, precioPaquete: 8000, cantidadUsada: 200 }); addIngredient({ nombre: 'Mantequilla', cantidadComprada: 250, precioPaquete: 8000, cantidadUsada: 62.5 });
-      $('#portionCount').addEventListener('input', calculateCost); $('#margin').addEventListener('input', calculateCost);
-      $('#costForm').addEventListener('submit', async (event) => { event.preventDefault(); const button = $('button[type="submit"]', event.currentTarget); button.disabled = true; status('costStatus','Guardando lote...'); try { const ingredients = costSnapshot(); if (ingredients.some((item) => !item.nombre || item.cantidadComprada <= 0 || item.cantidadUsada <= 0 || item.cantidadUsada > item.cantidadComprada)) throw new Error('Revisa los insumos: la cantidad usada debe ser positiva y no superar lo comprado.'); const result = await post('/costeo/lotes', { nombre: $('#productName').value.trim(), porciones: Number($('#portionCount').value), margenGanancia: Number($('#margin').value)/100, comercianteId: $('#merchantId').value || undefined, insumos: ingredients }); status('costStatus',`Lote guardado · precio sugerido ${money(result.precioSugeridoVenta)}`); notify('Lote de producción guardado.'); await loadProducts(); refreshDashboard(); } catch (error) { status('costStatus',error.message,true); } finally { button.disabled = false; } });
-      $('#loadProducts').addEventListener('click',loadProducts);
-      $('#dailySales').addEventListener('input',previewPockets); previewPockets();
-      $('#closingForm').addEventListener('submit',async (event) => { event.preventDefault(); const button=$('button[type="submit"]',event.currentTarget); button.disabled=true; status('closingStatus','Guardando cierre...'); try { await post('/bolsillos/cierre-diario',{ ventaTotalDia:Number($('#dailySales').value),fechaCierre:$('#closingDate').value,comercianteId:$('#merchantId').value.trim() }); status('closingStatus','Cierre guardado y aporte comunitario registrado.'); notify('Cierre de caja guardado.'); await loadClosings(); } catch(error) { status('closingStatus',error.message,true); } finally { button.disabled=false; } });
-      $('#reloadClosings').addEventListener('click',loadClosings); $('#debtFilter').addEventListener('change',loadDebts);
-      $('#debtForm').addEventListener('submit',async (event) => { event.preventDefault(); const button=$('button[type="submit"]',event.currentTarget); button.disabled=true; status('debtStatus','Guardando fiado...'); try { const phone=$('#debtPhone').value.replace(/\D/g,''); if (phone.length < 10 || phone.length > 13) throw new Error('Ingresa un número de WhatsApp válido.'); const debt=await post('/fiados',{cliente:$('#debtClient').value.trim(),telefonoWhatsapp:phone,montoFiado:Number($('#debtAmount').value),fechaLimitePago:$('#debtDue').value}); status('debtStatus','Fiado guardado.'); notify('Cuenta por cobrar registrada.'); event.currentTarget.reset(); $('#debtDue').value=dateOnly(new Date(today.getFullYear(),today.getMonth(),today.getDate()+7)); await loadDebts(); if(debt.enlaceWhatsapp && confirm('Fiado registrado. ¿Quieres abrir WhatsApp para compartir el recordatorio?')) window.open(debt.enlaceWhatsapp,'_blank','noopener'); } catch(error) { status('debtStatus',error.message,true); } finally { button.disabled=false; } });
-      $$('.tab').forEach((tab) => tab.addEventListener('click',() => { $$('.tab').forEach((item)=>item.classList.toggle('active',item===tab)); $$('.solid-panel').forEach((panel)=>panel.hidden=panel.id!==`solid-${tab.dataset.solidTab}`); if(tab.dataset.solidTab==='fondo') loadFund(); if(tab.dataset.solidTab==='compras') loadPurchases(); if(tab.dataset.solidTab==='encuentros') loadMeetings(); }));
-      $('#addOrder').addEventListener('click',()=>addOrder()); addOrder({ insumo:'Queso crema',cantidad:2000,unidad:'g',precioReferenciaRetail:24000 });
-      $('#purchaseForm').addEventListener('submit',async(event)=>{event.preventDefault(); const button=$('button[type="submit"]',event.currentTarget); button.disabled=true; status('purchaseStatus','Consolidando pedidos...'); try { const orders=$$('.order-row',$('#orderList')).map((row)=>{const v=$$('input',row);return {insumo:v[0].value.trim(),cantidad:Number(v[1].value),precioReferenciaRetail:Number(v[2].value)||undefined,unidad:v[3].value.trim(),comercianteId:$('#merchantId').value.trim()||'unidad-parque-marruecos'};}); await post('/red-solidaria/compras-colectivas',{titulo:$('#purchaseTitle').value.trim(),pedidos:orders}); status('purchaseStatus','Compra colectiva consolidada.'); notify('Compra colectiva guardada.'); await loadPurchases(); }catch(error){status('purchaseStatus',error.message,true);}finally{button.disabled=false;} });
-      $('#loanForm').addEventListener('submit',async(event)=>{event.preventDefault();const button=$('button[type="submit"]',event.currentTarget);button.disabled=true;status('loanStatus','Procesando solicitud...');try{await post('/red-solidaria/fondo/prestamos',{comercianteId:$('#loanMerchant').value.trim(),monto:Number($('#loanAmount').value),motivo:$('#loanReason').value.trim()||undefined});status('loanStatus','Préstamo registrado sin intereses.');notify('Movimiento del fondo registrado.');event.currentTarget.reset();$('#loanMerchant').value='unidad-parque-marruecos';await loadFund();}catch(error){status('loanStatus',error.message,true);}finally{button.disabled=false;}});
-      $('#meetingForm').addEventListener('submit',async(event)=>{event.preventDefault();const button=$('button[type="submit"]',event.currentTarget);button.disabled=true;status('meetingStatus','Agendando encuentro...');try{await post('/red-solidaria/encuentros',{titulo:$('#meetingTitle').value.trim(),lugar:$('#meetingPlace').value.trim()||'Parque Marruecos',fechaHora:new Date($('#meetingDate').value).toISOString(),cupo:Number($('#meetingCapacity').value)||30,saberes:$('#meetingSkills').value.split(',').map((value)=>value.trim()).filter(Boolean)});status('meetingStatus','Encuentro agendado.');notify('Círculo de saberes programado.');await loadMeetings();}catch(error){status('meetingStatus',error.message,true);}finally{button.disabled=false;}});
-      $('#reloadCalls').addEventListener('click',loadCalls); $('#reloadReports').addEventListener('click',loadReports);
-      $('#profileForm').addEventListener('submit',(event)=>{event.preventDefault();const profile={name:$('#profileName').value.trim(),business:$('#profileBusiness').value.trim()};localStorage.setItem('mipyme-profile',JSON.stringify(profile));applyProfile(profile.name);status('profileStatus','Preferencias guardadas en este dispositivo.');notify('Preferencias actualizadas.');});
-      $('#globalSearch').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();const query=event.currentTarget.value.toLowerCase();const target=query.includes('fiad')||query.includes('deud')?'fiados':query.includes('convoc')?'conectividad':query.includes('compra')||query.includes('fondo')||query.includes('encuent')?'solidaria':query.includes('caja')||query.includes('bols')?'bolsillos':'costeo';showPage(target);}});
-      refreshDashboard(); loadClosings(); loadDebts(); loadProducts(); loadPurchases(); loadCalls();
-    }
-    function applyProfile(name) { const first=name.trim().split(/\s+/)[0]||'Comerciante'; $('#welcomeName').textContent=first; $('#userNameSide').textContent=name; $('#userInitials').textContent=name.split(/\s+/).slice(0,2).map((part)=>part[0]).join('').toUpperCase(); }
-    setup();
+
+    // Descarga / Backup de datos
+    document.getElementById('btnExportData').addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(store.data, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `mipyme_marruecos_backup_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Copia de seguridad descargada.');
+    });
+
+    // Arranque de la Aplicación
+    window.addEventListener('DOMContentLoaded', async () => {
+      setDefaultDates();
+
+      // Cargar insumos iniciales para cheesecake
+      addInsumoRow('Queso crema especial', 1000, 24000, 500);
+      addInsumoRow('Galletas dulces trituradas', 400, 8000, 200);
+      addInsumoRow('Mantequilla sin sal', 250, 8000, 62.5);
+
+      recalcBolsillosPreview();
+      renderProductosTable();
+      renderCierresTable();
+      renderFiadosTable();
+      renderComprasColectivas();
+      renderFondoTable();
+      renderConvocatorias();
+      renderDashboard();
+
+      await checkBackendConnection();
+    });
   </script>
 </body>
 </html>

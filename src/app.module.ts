@@ -28,47 +28,47 @@ const hasDatabase = !!(
 
 const dbModules: Array<DynamicModule | typeof CosteoModule> = hasDatabase
   ? [
-      TypeOrmModule.forRootAsync({
-        inject: [ConfigService],
-        useFactory: (config: ConfigService) => {
-          const databaseUrl =
-            config.get<string>('DATABASE_URL') || config.get<string>('POSTGRES_URL');
-          const ssl = config.get<string>('DB_SSL', 'false') === 'true' || !!databaseUrl;
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const databaseUrl =
+          config.get<string>('DATABASE_URL') || config.get<string>('POSTGRES_URL');
+        const ssl = config.get<string>('DB_SSL', 'false') === 'true' || !!databaseUrl;
 
-          return {
-            type: 'postgres' as const,
-            ...(databaseUrl
-              ? { url: databaseUrl }
-              : {
-                  host: config.get<string>('DB_HOST', 'localhost'),
-                  port: Number(config.get('DB_PORT', 5432)),
-                  username: config.get<string>('DB_USER', 'marruecos'),
-                  password: config.get<string>('DB_PASSWORD', 'marruecos123'),
-                  database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
-                }),
-            ...(ssl ? { ssl: { rejectUnauthorized: false } } : {}),
-            entities: [
-              ProductoEntity,
-              InsumoEntity,
-              RegistroDiarioEntity,
-              FiadoEntity,
-              CompraColectivaEntity,
-              FondoComunitarioEntity,
-              EncuentroComunitarioEntity,
-              ConvocatoriaEntity,
-            ],
-            synchronize: true,
-            logging: config.get('NODE_ENV') === 'development',
-          };
-        },
-      }),
-      CosteoModule,
-      BolsillosModule,
-      FiadosModule,
-      RedSolidariaModule,
-      ConectividadModule,
-      SeedModule,
-    ]
+        return {
+          type: 'postgres' as const,
+          ...(databaseUrl
+            ? { url: databaseUrl }
+            : {
+              host: config.get<string>('DB_HOST', 'localhost'),
+              port: Number(config.get('DB_PORT', 5432)),
+              username: config.get<string>('DB_USER', 'marruecos'),
+              password: config.get<string>('DB_PASSWORD', 'marruecos123'),
+              database: config.get<string>('DB_NAME', 'mipyme_marruecos'),
+            }),
+          ...(ssl ? { ssl: { rejectUnauthorized: false } } : {}),
+          entities: [
+            ProductoEntity,
+            InsumoEntity,
+            RegistroDiarioEntity,
+            FiadoEntity,
+            CompraColectivaEntity,
+            FondoComunitarioEntity,
+            EncuentroComunitarioEntity,
+            ConvocatoriaEntity,
+          ],
+          synchronize: true,
+          logging: config.get('NODE_ENV') === 'development',
+        };
+      },
+    }),
+    CosteoModule,
+    BolsillosModule,
+    FiadosModule,
+    RedSolidariaModule,
+    ConectividadModule,
+    SeedModule,
+  ]
   : [];
 
 @Module({
@@ -82,4 +82,4 @@ const dbModules: Array<DynamicModule | typeof CosteoModule> = hasDatabase
   ],
   controllers: [SaludController],
 })
-export class AppModule {}
+export class AppModule { }

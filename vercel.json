@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.ts"
+      "dest": "public/index.html"
     }
   ]
 }
